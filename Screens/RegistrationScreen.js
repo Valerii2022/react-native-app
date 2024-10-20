@@ -8,6 +8,10 @@ import {
   Pressable,
   StyleSheet,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { commonStyles } from "../styles/common";
 
@@ -16,63 +20,71 @@ const RegistrationScreen = () => {
   const [image, setImage] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/sign-up-BG.png")}
-        resizeMode="cover"
-        style={styles.backgroundImage}
-      >
-        <View style={styles.formWrapper}>
-          <View style={styles.imageWrapper}>
-            <Pressable onPress={() => setImage(!image)}>
-              <Image
-                style={[styles.addButton, image && styles.rotate]}
-                source={
-                  image
-                    ? require("../assets/delete.png")
-                    : require("../assets/add.png")
-                }
-              />
-            </Pressable>
-          </View>
-          <Text style={[commonStyles.title, styles.title]}>Реєстрація</Text>
-          <View style={styles.form}>
-            <TextInput
-              placeholder="Логін"
-              style={commonStyles.input}
-              placeholderTextColor="#bdbdbd"
-            />
-            <TextInput
-              placeholder="Адреса електронної пошти"
-              style={commonStyles.input}
-              placeholderTextColor="#bdbdbd"
-            />
-            <View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../assets/sign-up-BG.png")}
+          resizeMode="cover"
+          style={styles.backgroundImage}
+        >
+          <View style={styles.formWrapper}>
+            <View style={styles.imageWrapper}>
+              <Pressable onPress={() => setImage(!image)}>
+                <Image
+                  style={[styles.addButton, image && styles.rotate]}
+                  source={
+                    image
+                      ? require("../assets/delete.png")
+                      : require("../assets/add.png")
+                  }
+                />
+              </Pressable>
+            </View>
+            <Text style={[commonStyles.title, styles.title]}>Реєстрація</Text>
+            <KeyboardAvoidingView
+              style={styles.form}
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
               <TextInput
-                placeholder="Пароль"
-                secureTextEntry={secure}
+                placeholder="Логін"
                 style={commonStyles.input}
                 placeholderTextColor="#bdbdbd"
               />
-              <Pressable onPress={() => setSecure(!secure)}>
-                <Text style={[commonStyles.accentText, styles.show]}>
-                  Показати
+              <TextInput
+                placeholder="Адреса електронної пошти"
+                style={commonStyles.input}
+                placeholderTextColor="#bdbdbd"
+              />
+              <View>
+                <TextInput
+                  placeholder="Пароль"
+                  secureTextEntry={secure}
+                  style={commonStyles.input}
+                  placeholderTextColor="#bdbdbd"
+                />
+                <Pressable
+                  onPress={() => setSecure(!secure)}
+                  style={styles.show}
+                >
+                  <Text style={[commonStyles.accentText]}>Показати</Text>
+                </Pressable>
+              </View>
+            </KeyboardAvoidingView>
+            <TouchableOpacity style={[commonStyles.button, styles.button]}>
+              <Text style={commonStyles.buttonText}>Зареєструватися</Text>
+            </TouchableOpacity>
+            <View style={commonStyles.accentTextWrapper}>
+              <Text style={commonStyles.accentText}>Вже є акаунт?</Text>
+              <Pressable>
+                <Text style={[commonStyles.accentText, styles.link]}>
+                  Увійти
                 </Text>
               </Pressable>
             </View>
           </View>
-          <TouchableOpacity style={[commonStyles.button, styles.button]}>
-            <Text style={commonStyles.buttonText}>Зареєструватися</Text>
-          </TouchableOpacity>
-          <View style={commonStyles.accentTextWrapper}>
-            <Text style={commonStyles.accentText}>Вже є акаунт?</Text>
-            <Pressable>
-              <Text style={commonStyles.accentText}>Увійти</Text>
-            </Pressable>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -113,7 +125,7 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "-45deg" }],
   },
   title: {
-    marginBottom: 33,
+    marginBottom: 32,
   },
   form: {
     gap: 16,
@@ -123,13 +135,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: 50,
     right: 0,
-    top: -50,
+    top: 0,
     padding: 16,
     justifyContent: "center",
     alignItems: "center",
   },
   button: {
     marginBottom: 16,
+  },
+  link: {
+    textDecorationLine: "underline",
   },
 });
 

@@ -7,6 +7,7 @@ export const commonStyles = StyleSheet.create({
     letterSpacing: 0.16,
     textAlign: "center",
     color: "#212121",
+    fontFamily: "RobotoMedium",
   },
   input: {
     backgroundColor: "#f6f6f6",
@@ -15,6 +16,10 @@ export const commonStyles = StyleSheet.create({
     borderWidth: 1,
     height: 50,
     padding: 16,
+    color: "#212121",
+    fontSize: 16,
+    fontWeight: "400",
+    fontFamily: "RobotoRegular",
   },
   button: {
     borderRadius: 100,
@@ -33,6 +38,7 @@ export const commonStyles = StyleSheet.create({
     lineHeight: 16,
     textAlign: "center",
     color: "#fff",
+    fontFamily: "RobotoRegular",
   },
   accentTextWrapper: {
     flexDirection: "row",
@@ -45,5 +51,6 @@ export const commonStyles = StyleSheet.create({
     lineHeight: 16,
     textAlign: "center",
     color: "#1b4371",
+    fontFamily: "RobotoRegular",
   },
 });
