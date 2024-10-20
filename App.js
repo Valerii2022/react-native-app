@@ -4,7 +4,7 @@ import LoginScreen from "./Screens/LoginScreen";
 import { useFonts } from "expo-font";
 // import RegistrationScreen from "./Screens/RegistrationScreen";
 
-export default function App() {
+const App = () => {
   const [fontsLoaded] = useFonts({
     RobotoRegular: require("./assets/fonts/Roboto-Regular.ttf"),
     RobotoMedium: require("./assets/fonts/Roboto-Medium.ttf"),
@@ -22,7 +22,7 @@ export default function App() {
       <StatusBar style="auto" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -30,3 +30,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 });
+
+export default App;
