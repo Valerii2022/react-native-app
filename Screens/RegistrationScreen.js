@@ -18,9 +18,12 @@ import { commonStyles } from "../styles/common";
 const RegistrationScreen = () => {
   const [secure, setSecure] = useState(true);
   const [image, setImage] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const { name, email, password } = form;
+
+  const handleInputChange = (name, value) => {
+    setForm({ ...form, [name]: value });
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -50,14 +53,14 @@ const RegistrationScreen = () => {
             >
               <TextInput
                 value={name}
-                onChangeText={setName}
+                onChangeText={(value) => handleInputChange("name", value)}
                 placeholder="Логін"
                 style={commonStyles.input}
                 placeholderTextColor="#bdbdbd"
               />
               <TextInput
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(value) => handleInputChange("email", value)}
                 placeholder="Адреса електронної пошти"
                 style={commonStyles.input}
                 placeholderTextColor="#bdbdbd"
@@ -65,7 +68,7 @@ const RegistrationScreen = () => {
               <View>
                 <TextInput
                   value={password}
-                  onChangeText={setPassword}
+                  onChangeText={(value) => handleInputChange("password", value)}
                   placeholder="Пароль"
                   secureTextEntry={secure}
                   style={commonStyles.input}
@@ -85,9 +88,7 @@ const RegistrationScreen = () => {
                 console.log(
                   `Логін: ${name}, електронна пошта: ${email}, пароль:${password}`
                 );
-                setName("");
-                setEmail("");
-                setPassword("");
+                setForm({ name: "", email: "", password: "" });
               }}
             >
               <Text style={commonStyles.buttonText}>Зареєструватися</Text>

@@ -1,8 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
-import LoginScreen from "./Screens/LoginScreen";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+// import LoginScreen from "./Screens/LoginScreen";
 import { useFonts } from "expo-font";
-// import RegistrationScreen from "./Screens/RegistrationScreen";
+import RegistrationScreen from "./Screens/RegistrationScreen";
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -12,13 +12,13 @@ const App = () => {
   });
 
   if (!fontsLoaded) {
-    return null;
+    return <ActivityIndicator />;
   }
 
   return (
     <View style={styles.container}>
-      <LoginScreen />
-      {/* <RegistrationScreen /> */}
+      {/* <LoginScreen /> */}
+      <RegistrationScreen />
       <StatusBar style="auto" />
     </View>
   );

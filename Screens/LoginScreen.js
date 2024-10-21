@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   View,
   Text,
-  Image,
   TextInput,
   TouchableOpacity,
   Pressable,
@@ -17,8 +16,12 @@ import { commonStyles } from "../styles/common";
 
 const LoginScreen = () => {
   const [secure, setSecure] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const { email, password } = form;
+
+  const handleInputChange = (name, value) => {
+    setForm({ ...form, [name]: value });
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -36,7 +39,7 @@ const LoginScreen = () => {
             >
               <TextInput
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(value) => handleInputChange("email", value)}
                 placeholder="Адреса електронної пошти"
                 style={commonStyles.input}
                 placeholderTextColor="#bdbdbd"
@@ -44,7 +47,7 @@ const LoginScreen = () => {
               <View>
                 <TextInput
                   value={password}
-                  onChangeText={setPassword}
+                  onChangeText={(value) => handleInputChange("password", value)}
                   placeholder="Пароль"
                   secureTextEntry={secure}
                   style={commonStyles.input}
@@ -62,8 +65,7 @@ const LoginScreen = () => {
               style={[commonStyles.button, styles.button]}
               onPress={() => {
                 console.log(`Електронна пошта: ${email}, пароль: ${password}`);
-                setEmail("");
-                setPassword("");
+                setForm({ email: "", password: "" });
               }}
             >
               <Text style={commonStyles.buttonText}>Увійти</Text>
