@@ -3,8 +3,6 @@ import {
   View,
   Text,
   Image,
-  TextInput,
-  TouchableOpacity,
   Pressable,
   StyleSheet,
   ImageBackground,
@@ -13,10 +11,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+
 import { commonStyles } from "../styles/common";
 
+import Button from "../components/Button";
+import Input from "../components/Input";
+
 const RegistrationScreen = () => {
-  const [secure, setSecure] = useState(true);
   const [image, setImage] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const { name, email, password } = form;
@@ -25,11 +26,21 @@ const RegistrationScreen = () => {
     setForm({ ...form, [name]: value });
   };
 
+  const handleSubmitForm = () => {
+    console.log(
+      `Логін: ${name}, електронна пошта: ${email}, пароль:${password}`
+    );
+    setForm({ name: "", email: "", password: "" });
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      >
         <ImageBackground
-          source={require("../assets/sign-up-BG.png")}
+          source={require("../assets/images/sign-up-BG.png")}
           resizeMode="cover"
           style={styles.backgroundImage}
         >
@@ -40,59 +51,41 @@ const RegistrationScreen = () => {
                   style={[styles.addButton, image && styles.rotate]}
                   source={
                     image
-                      ? require("../assets/delete.png")
-                      : require("../assets/add.png")
+                      ? require("../assets/images/delete.png")
+                      : require("../assets/images/add.png")
                   }
                 />
               </Pressable>
             </View>
             <Text style={[commonStyles.title, styles.title]}>Реєстрація</Text>
-            <KeyboardAvoidingView
-              style={styles.form}
-              behavior={Platform.OS == "ios" ? "padding" : "height"}
-            >
-              <TextInput
-                value={name}
-                onChangeText={(value) => handleInputChange("name", value)}
+            <View style={styles.form}>
+              <Input
+                inputValue={name}
+                inputTitle="name"
                 placeholder="Логін"
-                style={commonStyles.input}
-                placeholderTextColor="#bdbdbd"
+                handleInputChange={handleInputChange}
+                isSecure={false}
               />
-              <TextInput
-                value={email}
-                onChangeText={(value) => handleInputChange("email", value)}
+              <Input
+                inputValue={email}
+                inputTitle="email"
                 placeholder="Адреса електронної пошти"
-                style={commonStyles.input}
-                placeholderTextColor="#bdbdbd"
+                handleInputChange={handleInputChange}
+                isSecure={false}
               />
-              <View>
-                <TextInput
-                  value={password}
-                  onChangeText={(value) => handleInputChange("password", value)}
-                  placeholder="Пароль"
-                  secureTextEntry={secure}
-                  style={commonStyles.input}
-                  placeholderTextColor="#bdbdbd"
-                />
-                <Pressable
-                  onPress={() => setSecure(!secure)}
-                  style={styles.show}
-                >
-                  <Text style={[commonStyles.accentText]}>Показати</Text>
-                </Pressable>
-              </View>
-            </KeyboardAvoidingView>
-            <TouchableOpacity
-              style={[commonStyles.button, styles.button]}
-              onPress={() => {
-                console.log(
-                  `Логін: ${name}, електронна пошта: ${email}, пароль:${password}`
-                );
-                setForm({ name: "", email: "", password: "" });
-              }}
-            >
-              <Text style={commonStyles.buttonText}>Зареєструватися</Text>
-            </TouchableOpacity>
+              <Input
+                inputValue={password}
+                inputTitle="password"
+                placeholder="Пароль"
+                handleInputChange={handleInputChange}
+                isSecure={true}
+              />
+            </View>
+            <Button
+              title="Зареєструватися"
+              onPress={handleSubmitForm}
+              buttonStyles={styles.button}
+            />
             <View style={commonStyles.accentTextWrapper}>
               <Text style={commonStyles.accentText}>Вже є акаунт?</Text>
               <Pressable>
@@ -103,7 +96,7 @@ const RegistrationScreen = () => {
             </View>
           </View>
         </ImageBackground>
-      </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -150,15 +143,6 @@ const styles = StyleSheet.create({
   form: {
     gap: 16,
     marginBottom: 43,
-  },
-  show: {
-    position: "absolute",
-    height: 50,
-    right: 0,
-    top: 0,
-    padding: 16,
-    justifyContent: "center",
-    alignItems: "center",
   },
   button: {
     marginBottom: 16,

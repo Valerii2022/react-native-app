@@ -2,8 +2,6 @@ import { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   Pressable,
   StyleSheet,
   ImageBackground,
@@ -12,10 +10,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+
 import { commonStyles } from "../styles/common";
+import Button from "../components/Button";
+
+import Input from "../components/Input";
 
 const LoginScreen = () => {
-  const [secure, setSecure] = useState(true);
   const [form, setForm] = useState({ email: "", password: "" });
   const { email, password } = form;
 
@@ -23,53 +24,45 @@ const LoginScreen = () => {
     setForm({ ...form, [name]: value });
   };
 
+  const handleSubmitForm = () => {
+    console.log(`Електронна пошта: ${email}, пароль: ${password}`);
+    setForm({ email: "", password: "" });
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+      >
         <ImageBackground
-          source={require("../assets/sign-up-BG.png")}
+          source={require("../assets/images/sign-up-BG.png")}
           resizeMode="cover"
           style={styles.backgroundImage}
         >
           <View style={styles.formWrapper}>
             <Text style={[commonStyles.title, styles.title]}>Увійти</Text>
-            <KeyboardAvoidingView
-              style={styles.form}
-              behavior={Platform.OS == "ios" ? "padding" : "height"}
-            >
-              <TextInput
-                value={email}
-                onChangeText={(value) => handleInputChange("email", value)}
+            <View style={styles.form}>
+              <Input
+                inputValue={email}
+                inputTitle="email"
                 placeholder="Адреса електронної пошти"
-                style={commonStyles.input}
-                placeholderTextColor="#bdbdbd"
+                handleInputChange={handleInputChange}
+                isSecure={false}
               />
-              <View>
-                <TextInput
-                  value={password}
-                  onChangeText={(value) => handleInputChange("password", value)}
-                  placeholder="Пароль"
-                  secureTextEntry={secure}
-                  style={commonStyles.input}
-                  placeholderTextColor="#bdbdbd"
-                />
-                <Pressable
-                  onPress={() => setSecure(!secure)}
-                  style={styles.show}
-                >
-                  <Text style={[commonStyles.accentText]}>Показати</Text>
-                </Pressable>
-              </View>
-            </KeyboardAvoidingView>
-            <TouchableOpacity
-              style={[commonStyles.button, styles.button]}
-              onPress={() => {
-                console.log(`Електронна пошта: ${email}, пароль: ${password}`);
-                setForm({ email: "", password: "" });
-              }}
-            >
-              <Text style={commonStyles.buttonText}>Увійти</Text>
-            </TouchableOpacity>
+              <Input
+                inputValue={password}
+                inputTitle="password"
+                placeholder="Пароль"
+                handleInputChange={handleInputChange}
+                isSecure={true}
+              />
+            </View>
+            <Button
+              title="Увійти"
+              onPress={handleSubmitForm}
+              buttonStyles={styles.button}
+            />
             <View style={commonStyles.accentTextWrapper}>
               <Text style={commonStyles.accentText}>Немає акаунту?</Text>
               <Pressable>
@@ -80,7 +73,7 @@ const LoginScreen = () => {
             </View>
           </View>
         </ImageBackground>
-      </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -107,15 +100,6 @@ const styles = StyleSheet.create({
   form: {
     gap: 16,
     marginBottom: 43,
-  },
-  show: {
-    position: "absolute",
-    height: 50,
-    right: 0,
-    top: 0,
-    padding: 16,
-    justifyContent: "center",
-    alignItems: "center",
   },
   button: {
     marginBottom: 16,

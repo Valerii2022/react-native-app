@@ -1,4 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
+
+export const colors = StyleSheet.create({
+  white: "#ffffff",
+  black: "#212121",
+  orange: "#ff6c00",
+  border: "#e8e8e8",
+  backgroundGray: "#f6f6f6",
+  blue: "#1b4371",
+  placeholder: "#bdbdbd",
+});
 
 export const commonStyles = StyleSheet.create({
   title: {
@@ -6,39 +16,8 @@ export const commonStyles = StyleSheet.create({
     fontSize: 30,
     letterSpacing: 0.16,
     textAlign: "center",
-    color: "#212121",
+    color: colors.black,
     fontFamily: "RobotoMedium",
-  },
-  input: {
-    backgroundColor: "#f6f6f6",
-    borderColor: "#e8e8e8",
-    borderRadius: 8,
-    borderWidth: 1,
-    height: 50,
-    padding: 16,
-    color: "#212121",
-    fontSize: 16,
-    fontWeight: "400",
-    fontFamily: "RobotoRegular",
-  },
-  button: {
-    borderRadius: 100,
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 32,
-    paddingRight: 32,
-    height: 51,
-    backgroundColor: "#ff6c00",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    fontWeight: "400",
-    fontSize: 16,
-    lineHeight: 16,
-    textAlign: "center",
-    color: "#fff",
-    fontFamily: "RobotoRegular",
   },
   accentTextWrapper: {
     flexDirection: "row",
@@ -50,7 +29,7 @@ export const commonStyles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     textAlign: "center",
-    color: "#1b4371",
+    color: colors.blue,
     fontFamily: "RobotoRegular",
   },
 });
