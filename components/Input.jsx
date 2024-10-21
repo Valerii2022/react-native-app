@@ -9,7 +9,7 @@ const Input = ({
   handleInputChange,
   isSecure,
 }) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(isSecure);
   const [isFocused, setIsFocused] = useState(false);
 
   const onFocus = () => setIsFocused(true);
