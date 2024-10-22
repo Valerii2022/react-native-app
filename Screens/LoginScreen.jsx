@@ -10,15 +10,18 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { commonStyles } from "../styles/common";
 import Button from "../components/Button";
 
 import Input from "../components/Input";
 
-const LoginScreen = () => {
+const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const { email, password } = form;
+
+  const navigation = useNavigation();
 
   const handleInputChange = (name, value) => {
     setForm({ ...form, [name]: value });
@@ -27,6 +30,7 @@ const LoginScreen = () => {
   const handleSubmitForm = () => {
     console.log(`Електронна пошта: ${email}, пароль: ${password}`);
     setForm({ email: "", password: "" });
+    navigation.navigate("Home");
   };
 
   return (
@@ -65,7 +69,7 @@ const LoginScreen = () => {
             />
             <View style={commonStyles.accentTextWrapper}>
               <Text style={commonStyles.accentText}>Немає акаунту?</Text>
-              <Pressable>
+              <Pressable onPress={() => navigation.navigate("Registration")}>
                 <Text style={[commonStyles.accentText, styles.link]}>
                   Зареєструватися
                 </Text>
@@ -109,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default Login;

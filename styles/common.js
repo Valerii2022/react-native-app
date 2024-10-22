@@ -11,6 +11,16 @@ export const colors = StyleSheet.create({
 });
 
 export const commonStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  screenWrapper: {
+    paddingBottom: 32,
+    paddingTop: 32,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
   title: {
     fontWeight: "500",
     fontSize: 30,
