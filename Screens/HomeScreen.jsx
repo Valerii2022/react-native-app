@@ -1,41 +1,32 @@
-import { StyleSheet, Image, Pressable } from "react-native";
+import React from "react";
+import { Image, StyleSheet, View, Pressable, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 
 import { colors } from "../styles/common";
 
 import Posts from "./PostsScreen";
-import Profile from "./ProfileScreen";
 import CreatePosts from "./CreatePostsScreen";
-import { useNavigation } from "@react-navigation/native";
+import Profile from "./ProfileScreen";
 
 const Tabs = createBottomTabNavigator();
 
 const Home = () => {
+  const navigation = useNavigation();
+
   return (
     <Tabs.Navigator
-      screenOptions={() => ({
-        tabBarIcon: () => {
-          return <Image source={require("../assets/images/log-out.png")} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: "tomato",
-        inactiveTintColor: "gray",
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: [styles.tabStyles, styles.tabBottomStyles],
+        tabBarItemStyle: { paddingTop: Platform.OS == "ios" && 10 },
       }}
     >
       <Tabs.Screen
-        name="Posts"
+        name="Публікації"
         component={Posts}
         options={{
-          title: "Публікації",
-          headerStyle: {
-            backgroundColor: colors.white,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.3,
-            shadowRadius: 10,
-            elevation: 5,
-          },
+          headerStyle: styles.tabStyles,
           headerTintColor: colors.black,
           headerTitleStyle: {
             fontFamily: "RobotoMedium",
@@ -47,23 +38,30 @@ const Home = () => {
           headerLeft: null,
           headerTitleAlign: "center",
           headerRight: () => {
-            const navigation = useNavigation();
             return (
               <Pressable
                 onPress={() => navigation.navigate("Login")}
-                style={styles.logOutBtn}
+                style={styles.logoutIcon}
               >
                 <Image source={require("../assets/images/log-out.png")} />
               </Pressable>
             );
           },
+          tabBarIcon: () => (
+            <View>
+              <Image
+                source={require("../assets/images/grid.png")}
+                style={styles.icon}
+              />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
-        name="CreatePosts"
+        name="Створити публікацію"
         component={CreatePosts}
         options={{
-          title: "Створити публікацію",
+          tabBarStyle: { display: "none" },
           headerStyle: {
             backgroundColor: colors.white,
             shadowColor: "#000",
@@ -81,24 +79,39 @@ const Home = () => {
             letterSpacing: 0.4,
           },
           headerLeft: () => {
-            const navigation = useNavigation();
             return (
               <Pressable
-                onPress={() => navigation.navigate("Posts")}
-                style={styles.backBtn}
+                onPress={() => navigation.navigate("Публікації")}
+                style={styles.backIcon}
               >
                 <Image source={require("../assets/images/back.png")} />
               </Pressable>
             );
           },
           headerTitleAlign: "center",
+          tabBarIcon: () => (
+            <View style={styles.button}>
+              <Image
+                source={require("../assets/images/union.png")}
+                style={styles.addIcon}
+              />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
-        name="Profile"
+        name="Профіль"
         component={Profile}
         options={{
           headerShown: false,
+          tabBarIcon: () => (
+            <View style={styles.tabButton}>
+              <Image
+                source={require("../assets/images/user.png")}
+                style={styles.icon}
+              />
+            </View>
+          ),
         }}
       />
     </Tabs.Navigator>
@@ -106,15 +119,39 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
+  tabStyles: {
+    backgroundColor: colors.white,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
   },
-  logOutBtn: {
-    marginRight: 10,
+  tabBottomStyles: {
+    height: Platform.OS == "ios" ? 84 : 64,
+    paddingLeft: 80,
+    paddingRight: 80,
   },
-  backBtn: {
-    marginLeft: 10,
+  button: {
+    borderRadius: 20,
+    width: 70,
+    height: 40,
+    backgroundColor: colors.orange,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  tabButton: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  backIcon: { marginLeft: 10 },
+  logoutIcon: { marginRight: 10 },
+  addIcon: { width: 13, height: 13 },
+  icon: {
+    width: 24,
+    height: 24,
   },
 });
 
