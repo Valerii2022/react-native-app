@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-
+// testing commit
 export const colors = StyleSheet.create({
   white: "#ffffff",
   black: "#212121",
