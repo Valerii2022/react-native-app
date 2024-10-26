@@ -1,31 +1,29 @@
 import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
 
-import { colors, commonStyles } from "../styles/common";
+import { colors } from "../styles/common";
 
 import { tempPosts } from "../assets/tempData/posts";
 import PostItem from "../components/PostItem";
 
 const Posts = () => {
   return (
-    <View style={commonStyles.container}>
-      <ScrollView style={styles.scrollContainer}>
-        <View style={styles.nameWrapper}>
-          <View style={styles.avatarWrapper}>
-            <Image source={require("../assets/images/avatar.jpg")} />
-          </View>
-          <View>
-            <Text style={styles.name}>Natali Romanova</Text>
-            <Text style={styles.email}>email@example.com</Text>
-          </View>
+    <ScrollView style={styles.scrollContainer}>
+      <View style={styles.nameWrapper}>
+        <View style={styles.avatarWrapper}>
+          <Image source={require("../assets/images/avatar.jpg")} />
         </View>
-        <View style={styles.postWrapper}>
-          {tempPosts.length > 0 &&
-            tempPosts.map((item) => {
-              return <PostItem post={item} key={item.id} isLiked={false} />;
-            })}
+        <View>
+          <Text style={styles.name}>Natali Romanova</Text>
+          <Text style={styles.email}>email@example.com</Text>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+      <View style={styles.postWrapper}>
+        {tempPosts.length > 0 &&
+          tempPosts.map((item) => {
+            return <PostItem post={item} key={item.id} isLiked={false} />;
+          })}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -34,6 +32,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 32,
+    paddingBottom: 100,
   },
   nameWrapper: {
     flexDirection: "row",

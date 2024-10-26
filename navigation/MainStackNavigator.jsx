@@ -6,9 +6,9 @@ import { colors } from "../styles/common";
 
 import Login from "../Screens/LoginScreen";
 import Registration from "../Screens/RegistrationScreen";
-import Home from "../Screens/HomeScreen";
 import Comments from "../Screens/CommentsScreen";
 import Map from "../Screens/MapScreen";
+import TabNavigator from "./BottomTabNavigator";
 
 const Stack = createStackNavigator();
 
@@ -28,7 +28,7 @@ const MainStack = () => {
         />
         <Stack.Screen
           name="Home"
-          component={Home}
+          component={TabNavigator}
           options={{ headerShown: false }}
         />
         <Stack.Screen
