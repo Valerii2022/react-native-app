@@ -11,7 +11,9 @@ const PostItem = ({ post, isLiked }) => {
   return (
     <View style={styles.post}>
       <Image
-        source={require("../assets/images/venice.jpg")}
+        source={{
+          uri: url,
+        }}
         style={styles.postImage}
       />
       <Text style={styles.postTitle}>{title}</Text>

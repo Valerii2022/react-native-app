@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     marginTop: 150,
     flex: 1,
     backgroundColor: colors.white,
-    // paddingBottom: 45,
     paddingRight: 16,
     paddingLeft: 16,
     paddingTop: 22,
