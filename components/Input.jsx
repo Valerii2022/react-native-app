@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     padding: 16,
     color: colors.black,
     fontSize: 16,
+    lineHeight: 19,
     fontWeight: "400",
     fontFamily: "RobotoRegular",
   },

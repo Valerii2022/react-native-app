@@ -28,13 +28,23 @@ export const tempPosts = [
         avatar: "../images/avatar-2.png",
       },
     ],
+    likes: 0,
     map: "Ivano-Frankivs'k Region, Ukraine",
   },
   {
     id: 2,
     url: "../assets/images/sunset.jpg",
+    title: "Захід на Чорному морі",
+    comments: [],
+    likes: 0,
+    map: "Ukraine",
+  },
+  {
+    id: 3,
+    url: "../assets/images/venice.jpg",
     title: "Старий будиночок у Венеції",
     comments: [],
+    likes: 200,
     map: "Italy",
   },
 ];

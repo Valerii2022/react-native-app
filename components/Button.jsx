@@ -1,10 +1,19 @@
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { colors } from "../styles/common";
 
-const Button = ({ title, buttonStyles, onPress }) => {
+const Button = ({ title, buttonStyles, onPress, disable }) => {
   return (
-    <TouchableOpacity style={[styles.button, buttonStyles]} onPress={onPress}>
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity
+      style={[
+        styles.button,
+        buttonStyles,
+        disable && styles.disableBackgroundColor,
+      ]}
+      onPress={onPress}
+    >
+      <Text style={[styles.buttonText, disable && styles.disableTextColor]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -29,6 +38,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: "RobotoRegular",
   },
+  disableBackgroundColor: { backgroundColor: colors.backgroundGray },
+  disableTextColor: { color: colors.placeholder },
 });
 
 export default Button;

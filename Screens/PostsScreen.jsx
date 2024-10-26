@@ -1,21 +1,13 @@
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
 
 import { colors, commonStyles } from "../styles/common";
-import { useNavigation } from "@react-navigation/native";
+
 import { tempPosts } from "../assets/tempData/posts";
+import PostItem from "../components/PostItem";
 
 const Posts = () => {
-  const navigation = useNavigation();
-
   return (
-    <View style={[commonStyles.container]}>
+    <View style={commonStyles.container}>
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.nameWrapper}>
           <View style={styles.avatarWrapper}>
@@ -28,45 +20,8 @@ const Posts = () => {
         </View>
         <View style={styles.postWrapper}>
           {tempPosts.length > 0 &&
-            tempPosts.map(({ id, url, title, comments, map }) => {
-              return (
-                <View style={styles.post} key={id}>
-                  <Image
-                    source={require("../assets/images/nature.jpg")}
-                    style={styles.postImage}
-                  />
-                  <Text style={styles.posttitle}>{title}</Text>
-                  <View style={styles.detailsWrapper}>
-                    <Pressable
-                      style={styles.postDetails}
-                      onPress={() => navigation.navigate("Comments")}
-                    >
-                      <Image
-                        source={
-                          comments.length === 0
-                            ? require("../assets/images/message.png")
-                            : require("../assets/images/message-orange.png")
-                        }
-                      />
-                      <Text
-                        style={[
-                          styles.comments,
-                          comments.length === 0 && styles.commentsEmpty,
-                        ]}
-                      >
-                        {comments.length}
-                      </Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.postDetails}
-                      onPress={() => navigation.navigate("Map")}
-                    >
-                      <Image source={require("../assets/images/map.png")} />
-                      <Text style={styles.map}>{map}</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              );
+            tempPosts.map((item) => {
+              return <PostItem post={item} key={item.id} isLiked={false} />;
             })}
         </View>
       </ScrollView>
@@ -75,10 +30,10 @@ const Posts = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { paddingBottom: 100, paddingTop: 32 },
   scrollContainer: {
     paddingLeft: 16,
     paddingRight: 16,
+    paddingTop: 32,
   },
   nameWrapper: {
     flexDirection: "row",
@@ -103,23 +58,6 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   postWrapper: { gap: 32 },
-  post: { gap: 8 },
-  postImage: { height: 240, width: "100%", borderRadius: 8 },
-  detailsWrapper: { flexDirection: "row", justifyContent: "space-between" },
-  postDetails: { flexDirection: "row", gap: 6, alignItems: "center" },
-  comments: {
-    fontFamily: "RobotoRegular",
-    fontSize: 16,
-    color: colors.black,
-  },
-  commentsEmpty: { color: colors.placeholder },
-  map: {
-    fontFamily: "RobotoRegular",
-    fontSize: 16,
-    textAlign: "right",
-    color: colors.black,
-    textDecorationLine: "underline",
-  },
 });
 
 export default Posts;
