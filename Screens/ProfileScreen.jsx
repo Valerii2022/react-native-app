@@ -1,16 +1,60 @@
-import { View, ImageBackground, StyleSheet } from "react-native";
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+  Pressable,
+  Image,
+  Text,
+  ScrollView,
+} from "react-native";
 
-import { commonStyles } from "../styles/common";
+import { colors, commonStyles } from "../styles/common";
+
+import { tempPosts } from "../assets/tempData/posts";
+import PostItem from "../components/PostItem";
+import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
+  const navigation = useNavigation();
+
   return (
-    <View style={commonStyles.container}>
+    <ScrollView style={commonStyles.container}>
       <ImageBackground
         source={require("../assets/images/sign-up-BG.png")}
         resizeMode="cover"
         style={styles.backgroundImage}
-      ></ImageBackground>
-    </View>
+      >
+        <View style={styles.contentWrapper}>
+          <Pressable onPress={() => navigation.navigate("Login")}>
+            <Image
+              style={styles.logOutBtn}
+              source={require("../assets/images/log-out.png")}
+            />
+          </Pressable>
+          <View style={styles.imageWrapper}>
+            <Image
+              style={styles.avatar}
+              source={require("../assets/images/avatar.jpg")}
+            />
+            <Pressable>
+              <Image
+                style={styles.addButton}
+                source={require("../assets/images/delete.png")}
+              />
+            </Pressable>
+          </View>
+          <Text style={[commonStyles.title, styles.title]}>
+            Natali Romanova
+          </Text>
+          <View style={styles.postWrapper}>
+            {tempPosts.length > 0 &&
+              tempPosts.map((item) => {
+                return <PostItem post={item} key={item.id} isLiked={true} />;
+              })}
+          </View>
+        </View>
+      </ImageBackground>
+    </ScrollView>
   );
 };
 
@@ -19,6 +63,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
+  contentWrapper: {
+    marginTop: 150,
+    flex: 1,
+    backgroundColor: colors.white,
+    // paddingBottom: 45,
+    paddingRight: 16,
+    paddingLeft: 16,
+    paddingTop: 22,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  },
+  logOutBtn: { marginBottom: 46, marginLeft: "auto" },
+  imageWrapper: {
+    top: -60,
+    left: "50%",
+    transform: [{ translateX: -50 }],
+    position: "absolute",
+  },
+  avatar: {
+    width: "100%",
+    height: "100%",
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+  },
+  addButton: {
+    position: "absolute",
+    top: -40,
+    right: -14,
+    width: 25,
+    height: 25,
+    transform: [{ rotate: "-45deg" }],
+  },
+  title: {
+    marginBottom: 32,
+  },
+  postWrapper: { gap: 32, paddingBottom: 32 },
 });
 
 export default Profile;

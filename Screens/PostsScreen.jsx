@@ -7,32 +7,38 @@ import PostItem from "../components/PostItem";
 
 const Posts = () => {
   return (
-    <ScrollView style={styles.scrollContainer}>
-      <View style={styles.nameWrapper}>
-        <View style={styles.avatarWrapper}>
-          <Image source={require("../assets/images/avatar.jpg")} />
+    <>
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.nameWrapper}>
+          <View style={styles.avatarWrapper}>
+            <Image
+              style={styles.avatar}
+              source={require("../assets/images/avatar.jpg")}
+            />
+          </View>
+          <View>
+            <Text style={styles.name}>Natali Romanova</Text>
+            <Text style={styles.email}>email@example.com</Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.name}>Natali Romanova</Text>
-          <Text style={styles.email}>email@example.com</Text>
+        <View style={styles.postWrapper}>
+          {tempPosts.length > 0 &&
+            tempPosts.map((item) => {
+              return <PostItem post={item} key={item.id} isLiked={false} />;
+            })}
         </View>
-      </View>
-      <View style={styles.postWrapper}>
-        {tempPosts.length > 0 &&
-          tempPosts.map((item) => {
-            return <PostItem post={item} key={item.id} isLiked={false} />;
-          })}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  avatar: { width: 60, height: 60 },
   scrollContainer: {
+    flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 32,
-    paddingBottom: 100,
   },
   nameWrapper: {
     flexDirection: "row",
@@ -56,7 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: colors.black,
   },
-  postWrapper: { gap: 32 },
+  postWrapper: { gap: 32, paddingBottom: 64 },
 });
 
 export default Posts;

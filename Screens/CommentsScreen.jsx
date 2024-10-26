@@ -58,6 +58,7 @@ const Comments = () => {
                   >
                     <View>
                       <Image
+                        style={styles.avatar}
                         source={require("../assets/images/avatar-2.png")}
                       />
                     </View>
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
     height: 240,
   },
   commentsWrapper: { gap: 24 },
+  avatar: { width: 28, height: 28 },
   comment: { flexDirection: "row", gap: 16 },
   ownerComment: { flexDirection: "row-reverse", gap: 16 },
   textContainer: {

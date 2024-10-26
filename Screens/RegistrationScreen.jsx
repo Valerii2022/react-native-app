@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { commonStyles } from "../styles/common";
+import { colors, commonStyles } from "../styles/common";
 
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     marginTop: "auto",
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     paddingBottom: 45,
     paddingRight: 16,
     paddingLeft: 16,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 16,
-    backgroundColor: "#f6f6f6",
+    backgroundColor: colors.backgroundGray,
   },
   addButton: {
     position: "absolute",
