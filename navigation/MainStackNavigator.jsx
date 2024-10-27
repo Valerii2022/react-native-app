@@ -47,7 +47,10 @@ const MainStack = () => {
                   onPress={() => navigation.navigate("Публікації")}
                   style={{ marginLeft: 10 }}
                 >
-                  <Image source={require("../assets/images/back.png")} />
+                  <Image
+                    source={require("../assets/images/back.png")}
+                    style={styles.icon}
+                  />
                 </Pressable>
               );
             },
@@ -69,7 +72,10 @@ const MainStack = () => {
                   onPress={() => navigation.navigate("Публікації")}
                   style={{ marginLeft: 10 }}
                 >
-                  <Image source={require("../assets/images/back.png")} />
+                  <Image
+                    source={require("../assets/images/back.png")}
+                    style={styles.icon}
+                  />
                 </Pressable>
               );
             },
@@ -96,6 +102,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     letterSpacing: 0.4,
   },
+  icon: { width: 24, height: 24 },
 });
 
 export default MainStack;

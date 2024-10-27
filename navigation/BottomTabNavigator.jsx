@@ -36,7 +36,10 @@ const TabNavigator = () => {
                 onPress={() => navigation.navigate("Login")}
                 style={styles.logoutIcon}
               >
-                <Image source={require("../assets/images/log-out.png")} />
+                <Image
+                  source={require("../assets/images/log-out.png")}
+                  style={{ width: 24, height: 24 }}
+                />
               </Pressable>
             );
           },
@@ -70,16 +73,23 @@ const TabNavigator = () => {
           tabBarIcon: () => {
             const index = navigation.getState()?.index;
             return (
-              <View style={index === 0 ? styles.button : styles.tabButton}>
+              <Pressable
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate(
+                    index === 0 ? "Створити публікацію" : "Профіль"
+                  )
+                }
+              >
                 <Image
                   source={
                     index === 0
                       ? require("../assets/images/union.png")
-                      : require("../assets/images/union-dark.png")
+                      : require("../assets/images/user-white.png")
                   }
-                  style={styles.addIcon}
+                  style={styles.icon}
                 />
-              </View>
+              </Pressable>
             );
           },
         })}
@@ -87,21 +97,31 @@ const TabNavigator = () => {
       <Tabs.Screen
         name="Профіль"
         component={Profile}
-        options={{
+        options={({ navigation }) => ({
           headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <View style={focused ? styles.button : styles.tabButton}>
-              <Image
-                source={
-                  focused
-                    ? require("../assets/images/user-white.png")
-                    : require("../assets/images/user.png")
+          tabBarIcon: () => {
+            const index = navigation.getState()?.index;
+            return (
+              <Pressable
+                style={styles.tabButton}
+                onPress={() =>
+                  navigation.navigate(
+                    index === 2 ? "Створити публікацію" : "Профіль"
+                  )
                 }
-                style={styles.icon}
-              />
-            </View>
-          ),
-        }}
+              >
+                <Image
+                  source={
+                    index === 2
+                      ? require("../assets/images/union-dark.png")
+                      : require("../assets/images/user.png")
+                  }
+                  style={styles.icon}
+                />
+              </Pressable>
+            );
+          },
+        })}
       />
     </Tabs.Navigator>
   );
@@ -137,10 +157,9 @@ const styles = StyleSheet.create({
   },
   backIcon: { marginLeft: 10 },
   logoutIcon: { marginRight: 10 },
-  addIcon: { width: 13, height: 13 },
   icon: {
-    width: 24,
-    height: 24,
+    width: 40,
+    height: 40,
   },
   headerTitleStyles: {
     fontFamily: "RobotoMedium",

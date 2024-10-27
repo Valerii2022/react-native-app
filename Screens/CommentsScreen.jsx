@@ -86,7 +86,10 @@ const Comments = () => {
                 onChangeText={(value) => setComment(value)}
               />
               <Pressable style={styles.addCommentBtn}>
-                <Image source={require("../assets/images/arrow-up.png")} />
+                <Image
+                  source={require("../assets/images/arrow-up.png")}
+                  style={{ width: 10, height: 14 }}
+                />
               </Pressable>
             </View>
           </View>

@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
-  logOutBtn: { marginBottom: 46, marginLeft: "auto" },
+  logOutBtn: { marginBottom: 46, marginLeft: "auto", width: 24, height: 24 },
   imageWrapper: {
     top: -60,
     left: "50%",

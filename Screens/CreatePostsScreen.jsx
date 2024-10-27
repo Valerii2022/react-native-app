@@ -50,7 +50,7 @@ const CreatePosts = () => {
                   onChangeText={(value) => setLocation(value)}
                 />
                 <Image
-                  style={styles.mapIcon}
+                  style={[styles.mapIcon, styles.icon]}
                   source={require("../assets/images/map.png")}
                 />
               </View>
@@ -58,7 +58,10 @@ const CreatePosts = () => {
             <Button title="Опублікувати" disable={true} />
           </View>
           <Pressable style={styles.trashBtn}>
-            <Image source={require("../assets/images/trash.png")} />
+            <Image
+              source={require("../assets/images/trash.png")}
+              style={styles.icon}
+            />
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -128,6 +131,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
   },
+  icon: { width: 24, height: 24 },
 });
 
 export default CreatePosts;

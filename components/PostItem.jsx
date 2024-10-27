@@ -29,6 +29,7 @@ const PostItem = ({ post, isLiked }) => {
                   ? require("../assets/images/message.png")
                   : require("../assets/images/message-orange.png")
               }
+              style={styles.icon}
             />
             <Text
               style={[
@@ -47,6 +48,7 @@ const PostItem = ({ post, isLiked }) => {
                     ? require("../assets/images/like.png")
                     : require("../assets/images/no-likes.png")
                 }
+                style={styles.icon}
               />
               <Text
                 style={[styles.comments, likes === 0 && styles.commentsEmpty]}
@@ -60,7 +62,10 @@ const PostItem = ({ post, isLiked }) => {
           style={styles.postDetails}
           onPress={() => navigation.navigate("Map")}
         >
-          <Image source={require("../assets/images/map.png")} />
+          <Image
+            source={require("../assets/images/map.png")}
+            style={styles.icon}
+          />
           <Text style={styles.map}>{map}</Text>
         </Pressable>
       </View>
@@ -96,6 +101,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     textDecorationLine: "underline",
   },
+  icon: { width: 24, height: 24 },
 });
 
 export default PostItem;

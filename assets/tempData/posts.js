@@ -32,7 +32,7 @@ export const tempPosts = [
       },
     ],
     likes: 0,
-    map: "Ivano-Frankivs'k Region, Ukraine",
+    map: "Ukraine",
   },
   {
     id: 2,
