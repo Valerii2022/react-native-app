@@ -67,18 +67,21 @@ const TabNavigator = () => {
             );
           },
           headerTitleAlign: "center",
-          tabBarIcon: ({ focused }) => (
-            <View style={focused ? styles.button : styles.tabButton}>
-              <Image
-                source={
-                  focused
-                    ? require("../assets/images/union.png")
-                    : require("../assets/images/union-dark.png")
-                }
-                style={styles.addIcon}
-              />
-            </View>
-          ),
+          tabBarIcon: () => {
+            const index = navigation.getState()?.index;
+            return (
+              <View style={index === 0 ? styles.button : styles.tabButton}>
+                <Image
+                  source={
+                    index === 0
+                      ? require("../assets/images/union.png")
+                      : require("../assets/images/union-dark.png")
+                  }
+                  style={styles.addIcon}
+                />
+              </View>
+            );
+          },
         })}
       />
       <Tabs.Screen
