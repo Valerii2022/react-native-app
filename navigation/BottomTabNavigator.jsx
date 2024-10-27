@@ -1,7 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, View, Pressable, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
 
 import { colors } from "../styles/common";
 
@@ -12,29 +11,23 @@ import Profile from "../Screens/ProfileScreen";
 const Tabs = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const navigation = useNavigation();
-
   return (
     <Tabs.Navigator
-      screenOptions={{
+      initialRouteName="Публікації"
+      screenOptions={(navigation) => ({
         tabBarShowLabel: false,
         tabBarStyle: [styles.tabStyles, styles.tabBottomStyles],
         tabBarItemStyle: { paddingTop: Platform.OS == "ios" && 10 },
-      }}
+        headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
+      })}
     >
       <Tabs.Screen
         name="Публікації"
         component={Posts}
-        options={{
+        options={({ navigation }) => ({
           headerStyle: styles.tabStyles,
           headerTintColor: colors.black,
-          headerTitleStyle: {
-            fontFamily: "RobotoMedium",
-            fontWeight: "500",
-            fontSize: 17,
-            lineHeight: 22,
-            letterSpacing: 0.4,
-          },
+          headerTitleStyle: styles.headerTitleStyles,
           headerLeft: null,
           headerTitleAlign: "center",
           headerRight: () => {
@@ -48,40 +41,25 @@ const TabNavigator = () => {
             );
           },
           tabBarIcon: () => (
-            <View>
-              <Image
-                source={require("../assets/images/grid.png")}
-                style={styles.icon}
-              />
-            </View>
+            <Image
+              source={require("../assets/images/grid.png")}
+              style={styles.icon}
+            />
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         name="Створити публікацію"
         component={CreatePosts}
-        options={{
+        options={({ navigation }) => ({
           tabBarStyle: { display: "none" },
-          headerStyle: {
-            backgroundColor: colors.white,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: 0.3,
-            shadowRadius: 10,
-            elevation: 5,
-          },
+          headerStyle: styles.headerStyles,
           headerTintColor: colors.black,
-          headerTitleStyle: {
-            fontFamily: "RobotoMedium",
-            fontWeight: "500",
-            fontSize: 17,
-            lineHeight: 22,
-            letterSpacing: 0.4,
-          },
+          headerTitleStyle: styles.headerTitleStyles,
           headerLeft: () => {
             return (
               <Pressable
-                onPress={() => navigation.navigate("Публікації")}
+                onPress={() => navigation.goBack()}
                 style={styles.backIcon}
               >
                 <Image source={require("../assets/images/back.png")} />
@@ -89,25 +67,33 @@ const TabNavigator = () => {
             );
           },
           headerTitleAlign: "center",
-          tabBarIcon: () => (
-            <View style={styles.button}>
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? styles.button : styles.tabButton}>
               <Image
-                source={require("../assets/images/union.png")}
+                source={
+                  focused
+                    ? require("../assets/images/union.png")
+                    : require("../assets/images/union-dark.png")
+                }
                 style={styles.addIcon}
               />
             </View>
           ),
-        }}
+        })}
       />
       <Tabs.Screen
         name="Профіль"
         component={Profile}
         options={{
           headerShown: false,
-          tabBarIcon: () => (
-            <View style={styles.tabButton}>
+          tabBarIcon: ({ focused }) => (
+            <View style={focused ? styles.button : styles.tabButton}>
               <Image
-                source={require("../assets/images/user.png")}
+                source={
+                  focused
+                    ? require("../assets/images/user-white.png")
+                    : require("../assets/images/user.png")
+                }
                 style={styles.icon}
               />
             </View>
@@ -152,6 +138,21 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
+  },
+  headerTitleStyles: {
+    fontFamily: "RobotoMedium",
+    fontWeight: "500",
+    fontSize: 17,
+    lineHeight: 22,
+    letterSpacing: 0.4,
+  },
+  headerStyles: {
+    backgroundColor: colors.white,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
   },
 });
 

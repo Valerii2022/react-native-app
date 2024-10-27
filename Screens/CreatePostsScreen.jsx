@@ -25,43 +25,54 @@ const CreatePosts = () => {
         style={[commonStyles.container, commonStyles.screenWrapper]}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
-        <View style={styles.ImageWrapper}>
-          <Pressable styles={styles.cameraWrapper}>
-            <Image source={require("../assets/images/camera.jpg")} />
+        <View style={styles.container}>
+          <View>
+            <View style={styles.imageWrapper}>
+              <View style={styles.cameraWrapper}>
+                <Pressable>
+                  <Image source={require("../assets/images/camera.jpg")} />
+                </Pressable>
+              </View>
+            </View>
+            <Text style={styles.text}>Завантажте фото</Text>
+            <View style={styles.form}>
+              <TextInput
+                style={styles.input}
+                placeholder="Назва..."
+                value={title}
+                onChangeText={(value) => setTitle(value)}
+              />
+              <View style={styles.locationInputWrapper}>
+                <TextInput
+                  style={[styles.input, styles.locationInput]}
+                  placeholder="Місцевість..."
+                  value={location}
+                  onChangeText={(value) => setLocation(value)}
+                />
+                <Image
+                  style={styles.mapIcon}
+                  source={require("../assets/images/map.png")}
+                />
+              </View>
+            </View>
+            <Button title="Опублікувати" disable={true} />
+          </View>
+          <Pressable style={styles.trashBtn}>
+            <Image source={require("../assets/images/trash.png")} />
           </Pressable>
         </View>
-        <Text style={styles.text}>Завантажте фото</Text>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="Назва..."
-            value={title}
-            onChangeText={(value) => setTitle(value)}
-          />
-          <View style={styles.locationInputWrapper}>
-            <TextInput
-              style={[styles.input, styles.locationInput]}
-              placeholder="Місцевість..."
-              value={location}
-              onChangeText={(value) => setLocation(value)}
-            />
-            <Image
-              style={styles.mapIcon}
-              source={require("../assets/images/map.png")}
-            />
-          </View>
-        </View>
-        <Button title="Опублікувати" disable={true} />
-        <Pressable style={styles.trashBtn}>
-          <Image source={require("../assets/images/trash.png")} />
-        </Pressable>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  ImageWrapper: {
+  container: {
+    height: "100%",
+    paddingBottom: 32,
+    justifyContent: "space-between",
+  },
+  imageWrapper: {
     width: "100%",
     height: 240,
     borderRadius: 8,
@@ -73,10 +84,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cameraWrapper: {
+    backgroundColor: colors.white,
     width: 60,
     height: 60,
-    backgroundColor: colors.white,
-    borderRadius: "100%",
+    borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -105,17 +116,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.black,
   },
+  addCommentBtn: { marginBottom: 120 },
   trashBtn: {
+    marginTop: 24,
     width: 70,
     height: 40,
     borderRadius: 20,
     backgroundColor: colors.backgroundGray,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "auto",
     marginLeft: "auto",
     marginRight: "auto",
-    // mardinBottom: 32,
   },
 });
 

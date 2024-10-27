@@ -1,7 +1,7 @@
 export const tempPosts = [
   {
     id: 1,
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Altja_j%C3%B5gi_Lahemaal.jpg/1600px-Altja_j%C3%B5gi_Lahemaal.jpg",
+    url: "https://natureconservancy-h.assetsadobe.com/is/image/content/dam/tnc/nature/en/photos/Zugpsitze_mountain.jpg?crop=0%2C214%2C3008%2C1579&wid=1200&hei=630&scl=2.506666666666667",
     title: "Ліс",
     comments: [
       {
@@ -10,7 +10,8 @@ export const tempPosts = [
           "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
         date: "2024-10-21T22:34:30.709Z",
         owner: false,
-        avatar: "../images/avatar-2.png",
+        avatar:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZGLAus8hoZY2_EHPMYjs6hxUujvHiqeZc5A&s",
       },
       {
         id: 2,
@@ -18,14 +19,16 @@ export const tempPosts = [
           "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
         date: "2024-10-22T09:34:30.709Z",
         owner: true,
-        avatar: "../images/avatar.jpg",
+        avatar:
+          "https://discoverymood.com/wp-content/uploads/2020/04/Mental-Strong-Women-min.jpg",
       },
       {
         id: 3,
         comment: "Thank you! That was very helpful!",
         date: "2024-10-22T09:45:30.709Z",
         owner: false,
-        avatar: "../images/avatar-2.png",
+        avatar:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZGLAus8hoZY2_EHPMYjs6hxUujvHiqeZc5A&s",
       },
     ],
     likes: 0,

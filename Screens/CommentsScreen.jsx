@@ -49,35 +49,34 @@ const Comments = () => {
               source={require("../assets/images/nature.jpg")}
             />
             <View style={styles.commentsWrapper}>
-              {tempPosts[0].comments.map(({ id, comment, date, owner }) => {
-                const { formattedDate, time } = formatDateAndTime(date);
-                return (
-                  <View
-                    style={[owner ? styles.ownerComment : styles.comment]}
-                    key={id}
-                  >
-                    <View>
-                      <Image
-                        style={styles.avatar}
-                        source={require("../assets/images/avatar-2.png")}
-                      />
-                    </View>
+              {tempPosts[0].comments.map(
+                ({ id, comment, date, owner, avatar }) => {
+                  const { formattedDate, time } = formatDateAndTime(date);
+                  return (
                     <View
-                      style={[
-                        styles.textContainer,
-                        owner && styles.ownerTextContainer,
-                      ]}
+                      style={[owner ? styles.ownerComment : styles.comment]}
+                      key={id}
                     >
-                      <Text style={styles.commentText}>{comment}</Text>
-                      <View style={styles.dateWrapper}>
-                        <Text style={styles.date}>{formattedDate}</Text>
-                        <Text style={styles.date}>|</Text>
-                        <Text style={styles.date}>{time}</Text>
+                      <View>
+                        <Image style={styles.avatar} source={{ uri: avatar }} />
+                      </View>
+                      <View
+                        style={[
+                          styles.textContainer,
+                          owner && styles.ownerTextContainer,
+                        ]}
+                      >
+                        <Text style={styles.commentText}>{comment}</Text>
+                        <View style={styles.dateWrapper}>
+                          <Text style={styles.date}>{formattedDate}</Text>
+                          <Text style={styles.date}>|</Text>
+                          <Text style={styles.date}>{time}</Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                );
-              })}
+                  );
+                }
+              )}
             </View>
             <View style={styles.addCommentWrapper}>
               <TextInput
@@ -99,7 +98,6 @@ const Comments = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 32,
     paddingTop: 32,
   },
   inner: { paddingLeft: 16, paddingRight: 16 },
@@ -109,8 +107,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 240,
   },
-  commentsWrapper: { gap: 24 },
-  avatar: { width: 28, height: 28 },
+  commentsWrapper: { gap: 24, marginBottom: 16 },
+  avatar: { width: 28, height: 28, borderRadius: 100 },
   comment: { flexDirection: "row", gap: 16 },
   ownerComment: { flexDirection: "row-reverse", gap: 16 },
   textContainer: {
@@ -164,7 +162,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     backgroundColor: colors.orange,
-    borderRadius: "100%",
+    borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
   },
