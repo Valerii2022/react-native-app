@@ -18,7 +18,6 @@ const TabNavigator = () => {
         tabBarShowLabel: false,
         tabBarStyle: [styles.tabStyles, styles.tabBottomStyles],
         tabBarItemStyle: { paddingTop: Platform.OS == "ios" && 10 },
-        headerLeft: () => <BackButton onPress={() => navigation.goBack()} />,
       })}
     >
       <Tabs.Screen
@@ -67,7 +66,7 @@ const TabNavigator = () => {
               >
                 <Image
                   source={require("../assets/images/back.png")}
-                  style={styles.logoutIcon}
+                  style={{ width: 24, height: 24 }}
                 />
               </Pressable>
             );
