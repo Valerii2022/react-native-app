@@ -65,7 +65,10 @@ const TabNavigator = () => {
                 onPress={() => navigation.goBack()}
                 style={styles.backIcon}
               >
-                <Image source={require("../assets/images/back.png")} />
+                <Image
+                  source={require("../assets/images/back.png")}
+                  style={styles.logoutIcon}
+                />
               </Pressable>
             );
           },
