@@ -22,13 +22,11 @@ import Button from "../components/Button";
 const CreatePosts = () => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [image, setImage] = useState(null);
+  const [uriImage, setUriImage] = useState("");
   const navigation = useNavigation();
 
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const [permissionResponse, requestLibraryPermission] =
-    MediaLibrary.usePermissions();
   const camera = useRef();
 
   if (!permission) {
@@ -56,15 +54,14 @@ const CreatePosts = () => {
     if (!camera) return;
 
     const image = await camera?.current?.takePictureAsync();
-    // await MediaLibrary.saveToLibraryAsync(image.uri);
-    setImage(image.uri);
-    console.log("image", image);
+    await MediaLibrary.saveToLibraryAsync(image.uri);
+    console.log("image", image.uri);
   };
 
   const handleCreatingPost = () => {
     setTitle("");
     setLocation("");
-    setImage(null);
+    setUriImage("");
     navigation.navigate("Публікації");
   };
 
@@ -93,7 +90,7 @@ const CreatePosts = () => {
                   </View>
                 </CameraView>
               </View>
-              <Text style={styles.text}>Завантажте фото</Text>
+              <Text style={styles.text}></Text>
               <View style={styles.form}>
                 <TextInput
                   style={styles.input}
@@ -125,7 +122,7 @@ const CreatePosts = () => {
               onPress={() => {
                 setTitle("");
                 setLocation("");
-                setImage(null);
+                setUriImage("");
               }}
             >
               <Image

@@ -46,7 +46,7 @@ export const tempPosts = [
   },
   {
     id: 3,
-    url: "https://media.cntraveller.com/photos/665ee92a9421aab48dea082c/16:9/w_2560%2Cc_limit/venice-GettyImages-941234062.jpeg",
+    url: "https://cdn.britannica.com/62/153462-050-3D4F41AF/Grand-Canal-Venice.jpg",
     title: "Старий будиночок у Венеції",
     comments: [],
     likes: 200,
