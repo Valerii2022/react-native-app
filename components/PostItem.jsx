@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { colors } from "../styles/common";
 
 const PostItem = ({ post, isLiked }) => {
-  const { url, title, comments, map, likes } = post;
+  const { id, url, title, comments, map, likes, location } = post;
 
   const navigation = useNavigation();
 
@@ -21,7 +21,7 @@ const PostItem = ({ post, isLiked }) => {
         <View style={styles.postDetailsWrapper}>
           <Pressable
             style={styles.postDetails}
-            onPress={() => navigation.navigate("Comments")}
+            onPress={() => navigation.navigate("Comments", { id })}
           >
             <Image
               source={
@@ -60,7 +60,7 @@ const PostItem = ({ post, isLiked }) => {
         </View>
         <Pressable
           style={styles.postDetails}
-          onPress={() => navigation.navigate("Map")}
+          onPress={() => navigation.navigate("Map", { id })}
         >
           <Image
             source={require("../assets/images/map.png")}

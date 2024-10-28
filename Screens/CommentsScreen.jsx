@@ -22,7 +22,7 @@ import { tempPosts } from "../assets/tempData/posts";
 
 dayjs.extend(utc);
 
-const Comments = () => {
+const Comments = ({ route }) => {
   const [comment, setComment] = useState("");
 
   const formatDateAndTime = (isoString) => {
@@ -36,6 +36,8 @@ const Comments = () => {
     return { formattedDate, time };
   };
 
+  const currentPost = tempPosts.find((post) => post.id === route.params.id);
+
   return (
     <KeyboardAvoidingView
       style={[commonStyles.container, styles.container]}
@@ -44,39 +46,40 @@ const Comments = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.inner}>
-            <Image
-              style={styles.image}
-              source={require("../assets/images/nature.jpg")}
-            />
+            <Image style={styles.image} source={{ uri: currentPost.url }} />
             <View style={styles.commentsWrapper}>
-              {tempPosts[0].comments.map(
-                ({ id, comment, date, owner, avatar }) => {
-                  const { formattedDate, time } = formatDateAndTime(date);
-                  return (
-                    <View
-                      style={[owner ? styles.ownerComment : styles.comment]}
-                      key={id}
-                    >
-                      <View>
-                        <Image style={styles.avatar} source={{ uri: avatar }} />
-                      </View>
+              {currentPost &&
+                currentPost.comments.map(
+                  ({ id, comment, date, owner, avatar }) => {
+                    const { formattedDate, time } = formatDateAndTime(date);
+                    return (
                       <View
-                        style={[
-                          styles.textContainer,
-                          owner && styles.ownerTextContainer,
-                        ]}
+                        style={[owner ? styles.ownerComment : styles.comment]}
+                        key={id}
                       >
-                        <Text style={styles.commentText}>{comment}</Text>
-                        <View style={styles.dateWrapper}>
-                          <Text style={styles.date}>{formattedDate}</Text>
-                          <Text style={styles.date}>|</Text>
-                          <Text style={styles.date}>{time}</Text>
+                        <View>
+                          <Image
+                            style={styles.avatar}
+                            source={{ uri: avatar }}
+                          />
+                        </View>
+                        <View
+                          style={[
+                            styles.textContainer,
+                            owner && styles.ownerTextContainer,
+                          ]}
+                        >
+                          <Text style={styles.commentText}>{comment}</Text>
+                          <View style={styles.dateWrapper}>
+                            <Text style={styles.date}>{formattedDate}</Text>
+                            <Text style={styles.date}>|</Text>
+                            <Text style={styles.date}>{time}</Text>
+                          </View>
                         </View>
                       </View>
-                    </View>
-                  );
-                }
-              )}
+                    );
+                  }
+                )}
             </View>
             <View style={styles.addCommentWrapper}>
               <TextInput

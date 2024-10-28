@@ -33,6 +33,7 @@ export const tempPosts = [
     ],
     likes: 0,
     map: "Ukraine",
+    location: { latitude: 47.93216392685337, longitude: 19.255455998747443 },
   },
   {
     id: 2,
@@ -40,7 +41,8 @@ export const tempPosts = [
     title: "Захід на Чорному морі",
     comments: [],
     likes: 0,
-    map: "Ukraine",
+    map: "Bulgaria",
+    location: { latitude: 42.504549533261994, longitude: 27.48422906089935 },
   },
   {
     id: 3,
@@ -49,5 +51,6 @@ export const tempPosts = [
     comments: [],
     likes: 200,
     map: "Italy",
+    location: { latitude: 45.43823449720747, longitude: 12.325444794809872 },
   },
 ];
