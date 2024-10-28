@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-// import * as Location from "expo-location";
+import * as Location from "expo-location";
 
 import { colors } from "../styles/common";
 
@@ -43,12 +43,7 @@ const Map = ({ route }) => {
         }}
         showsUserLocation={true}
       >
-        {location !== null && (
-          <Marker
-            title={title}
-            coordinate={location}
-          />
-        )}
+        {location !== null && <Marker title={title} coordinate={location} />}
       </MapView>
     </View>
   );

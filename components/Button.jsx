@@ -1,20 +1,20 @@
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, Pressable, StyleSheet } from "react-native";
 import { colors } from "../styles/common";
 
 const Button = ({ title, buttonStyles, onPress, disable }) => {
   return (
-    <TouchableOpacity
+    <Pressable
       style={[
         styles.button,
         buttonStyles,
         disable && styles.disableBackgroundColor,
       ]}
-      onPress={onPress}
+      onPress={disable ? () => {} : onPress}
     >
       <Text style={[styles.buttonText, disable && styles.disableTextColor]}>
         {title}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

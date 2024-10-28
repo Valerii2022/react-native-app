@@ -1,81 +1,176 @@
+import React, { useState, useRef } from "react";
 import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
+  Pressable,
+  TouchableWithoutFeedback,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
 
 import { colors, commonStyles } from "../styles/common";
 import Button from "../components/Button";
-import { useState } from "react";
 
 const CreatePosts = () => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
+  const [image, setImage] = useState(null);
+  const navigation = useNavigation();
+
+  const [facing, setFacing] = useState("back");
+  const [permission, requestPermission] = useCameraPermissions();
+  const [permissionResponse, requestLibraryPermission] =
+    MediaLibrary.usePermissions();
+  const camera = useRef();
+
+  if (!permission) {
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.messageContainer}>
+        <Text style={styles.message}>
+          Нам потрібен ваш дозвіл, щоб показати камеру
+        </Text>
+        <Pressable onPress={requestPermission}>
+          <Text>Надати доступ</Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
+
+  const takePhoto = async () => {
+    if (!camera) return;
+
+    const image = await camera?.current?.takePictureAsync();
+    // await MediaLibrary.saveToLibraryAsync(image.uri);
+    setImage(image.uri);
+    console.log("image", image);
+  };
+
+  const handleCreatingPost = () => {
+    setTitle("");
+    setLocation("");
+    setImage(null);
+    navigation.navigate("Публікації");
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
-        style={[commonStyles.container, commonStyles.screenWrapper]}
+        style={commonStyles.container}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 80}
       >
-        <View style={styles.container}>
-          <View>
-            <View style={styles.imageWrapper}>
-              <View style={styles.cameraWrapper}>
-                <Pressable>
-                  <Image source={require("../assets/images/camera.jpg")} />
-                </Pressable>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.container}>
+            <View>
+              <View style={styles.imageWrapper}>
+                <CameraView ref={camera} style={styles.camera} facing={facing}>
+                  <Pressable
+                    style={styles.flipBtn}
+                    onPress={toggleCameraFacing}
+                  >
+                    <Text style={styles.text}>Flip</Text>
+                  </Pressable>
+                  <View style={styles.cameraWrapper}>
+                    <Pressable onPress={takePhoto}>
+                      <Image source={require("../assets/images/camera.jpg")} />
+                    </Pressable>
+                  </View>
+                </CameraView>
               </View>
-            </View>
-            <Text style={styles.text}>Завантажте фото</Text>
-            <View style={styles.form}>
-              <TextInput
-                style={styles.input}
-                placeholder="Назва..."
-                value={title}
-                onChangeText={(value) => setTitle(value)}
-              />
-              <View style={styles.locationInputWrapper}>
+              <Text style={styles.text}>Завантажте фото</Text>
+              <View style={styles.form}>
                 <TextInput
-                  style={[styles.input, styles.locationInput]}
-                  placeholder="Місцевість..."
-                  value={location}
-                  onChangeText={(value) => setLocation(value)}
+                  style={styles.input}
+                  placeholder="Назва..."
+                  value={title}
+                  onChangeText={(value) => setTitle(value)}
                 />
-                <Image
-                  style={[styles.mapIcon, styles.icon]}
-                  source={require("../assets/images/map.png")}
-                />
+                <View style={styles.locationInputWrapper}>
+                  <TextInput
+                    style={[styles.input, styles.locationInput]}
+                    placeholder="Місцевість..."
+                    value={location}
+                    onChangeText={(value) => setLocation(value)}
+                  />
+                  <Image
+                    style={[styles.mapIcon, styles.icon]}
+                    source={require("../assets/images/map.png")}
+                  />
+                </View>
               </View>
+              <Button
+                title="Опублікувати"
+                disable={!title || !location}
+                onPress={handleCreatingPost}
+              />
             </View>
-            <Button title="Опублікувати" disable={true} />
+            <Pressable
+              style={styles.trashBtn}
+              onPress={() => {
+                setTitle("");
+                setLocation("");
+                setImage(null);
+              }}
+            >
+              <Image
+                source={require("../assets/images/trash.png")}
+                style={styles.icon}
+              />
+            </Pressable>
           </View>
-          <Pressable style={styles.trashBtn}>
-            <Image
-              source={require("../assets/images/trash.png")}
-              style={styles.icon}
-            />
-          </Pressable>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  messageContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  message: {
+    textAlign: "center",
+    paddingBottom: 10,
+  },
+  camera: {
+    flex: 1,
+    width: "100%",
     height: "100%",
-    paddingBottom: 32,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: "space-between",
   },
+  container: {
+    justifyContent: "space-between",
+    paddingTop: 32,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingBottom: 32,
+    height: "100%",
+  },
   imageWrapper: {
+    overflow: "hidden",
+    position: "relative",
     width: "100%",
     height: 240,
     borderRadius: 8,
@@ -86,8 +181,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
+  flipBtn: { position: "absolute", top: 16, right: 16 },
   cameraWrapper: {
-    backgroundColor: colors.white,
+    backgroundColor: "rgba(255,255,255,0.3)",
     width: 60,
     height: 60,
     borderRadius: 100,
@@ -119,7 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.black,
   },
-  addCommentBtn: { marginBottom: 120 },
   trashBtn: {
     marginTop: 24,
     width: 70,
