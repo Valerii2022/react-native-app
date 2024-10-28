@@ -27,6 +27,7 @@ const CreatePosts = () => {
 
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
+  const [mediaLibraryPermission, setMediaLibraryPermission] = useState(null);
   const camera = useRef();
 
   if (!permission) {
@@ -39,24 +40,36 @@ const CreatePosts = () => {
         <Text style={styles.message}>
           Нам потрібен ваш дозвіл, щоб показати камеру
         </Text>
-        <Pressable onPress={requestPermission}>
-          <Text>Надати доступ</Text>
-        </Pressable>
+        <Button onPress={requestPermission} title="Надати доступ" />
       </View>
     );
   }
 
-  function toggleCameraFacing() {
-    setFacing((current) => (current === "back" ? "front" : "back"));
-  }
+  const requestMediaLibraryPermission = async () => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    setMediaLibraryPermission(status === "granted");
+  };
 
   const takePhoto = async () => {
     if (!camera) return;
 
-    const image = await camera?.current?.takePictureAsync();
-    await MediaLibrary.saveToLibraryAsync(image.uri);
-    console.log("image", image.uri);
+    // Перевіряємо дозвіл на доступ до медіатеки
+    if (mediaLibraryPermission === null) {
+      await requestMediaLibraryPermission();
+    }
+
+    if (mediaLibraryPermission) {
+      const image = await camera?.current?.takePictureAsync();
+      await MediaLibrary.saveToLibraryAsync(image.uri);
+      console.log("image", image.uri);
+    } else {
+      alert("Доступ до медіатеки не надано");
+    }
   };
+
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
 
   const handleCreatingPost = () => {
     setTitle("");
@@ -141,10 +154,14 @@ const styles = StyleSheet.create({
   messageContainer: {
     flex: 1,
     justifyContent: "center",
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   message: {
     textAlign: "center",
-    paddingBottom: 10,
+    fontFamily: "RobotoRegular",
+    fontSize: 20,
+    marginBottom: 16,
   },
   camera: {
     flex: 1,
