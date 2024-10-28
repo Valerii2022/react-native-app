@@ -15,6 +15,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
 
 import { colors, commonStyles } from "../styles/common";
 import Button from "../components/Button";
@@ -22,12 +23,13 @@ import Button from "../components/Button";
 const CreatePosts = () => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
+  const [coordinates, setCoordinates] = useState(null);
   const [uriImage, setUriImage] = useState("");
-  const navigation = useNavigation();
-
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [mediaLibraryPermission, setMediaLibraryPermission] = useState(null);
+
+  const navigation = useNavigation();
   const camera = useRef();
 
   if (!permission) {
@@ -38,7 +40,7 @@ const CreatePosts = () => {
     return (
       <View style={styles.messageContainer}>
         <Text style={styles.message}>
-          Нам потрібен ваш дозвіл, щоб показати камеру
+          Нам потрібен Ваш дозвіл, щоб показати камеру
         </Text>
         <Button onPress={requestPermission} title="Надати доступ" />
       </View>
@@ -53,7 +55,6 @@ const CreatePosts = () => {
   const takePhoto = async () => {
     if (!camera) return;
 
-    // Перевіряємо дозвіл на доступ до медіатеки
     if (mediaLibraryPermission === null) {
       await requestMediaLibraryPermission();
     }
@@ -61,7 +62,7 @@ const CreatePosts = () => {
     if (mediaLibraryPermission) {
       const image = await camera?.current?.takePictureAsync();
       await MediaLibrary.saveToLibraryAsync(image.uri);
-      console.log("image", image.uri);
+      setUriImage(image.uri);
     } else {
       alert("Доступ до медіатеки не надано");
     }
@@ -71,10 +72,19 @@ const CreatePosts = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
-  const handleCreatingPost = () => {
+  const handleCreatingPost = async () => {
+    let { coords } = await Location.getCurrentPositionAsync({});
     setTitle("");
     setLocation("");
     setUriImage("");
+    setCoordinates({ latitude: coords.latitude, longitude: coords.longitude });
+    console.log("image", uriImage);
+    console.log("title", title);
+    console.log("location", location);
+    console.log("coords", {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
     navigation.navigate("Публікації");
   };
 
@@ -89,21 +99,38 @@ const CreatePosts = () => {
           <View style={styles.container}>
             <View>
               <View style={styles.imageWrapper}>
-                <CameraView ref={camera} style={styles.camera} facing={facing}>
-                  <Pressable
-                    style={styles.flipBtn}
-                    onPress={toggleCameraFacing}
+                {uriImage ? (
+                  <Image source={{ uri: uriImage }} style={styles.camera} />
+                ) : (
+                  <CameraView
+                    ref={camera}
+                    style={styles.camera}
+                    facing={facing}
                   >
-                    <Text style={styles.text}>Flip</Text>
-                  </Pressable>
-                  <View style={styles.cameraWrapper}>
-                    <Pressable onPress={takePhoto}>
-                      <Image source={require("../assets/images/camera.jpg")} />
+                    <Pressable
+                      style={styles.flipBtn}
+                      onPress={toggleCameraFacing}
+                    >
+                      <Text style={styles.text}>Flip</Text>
                     </Pressable>
-                  </View>
-                </CameraView>
+                    <View style={styles.cameraWrapper}>
+                      <Pressable onPress={takePhoto}>
+                        <Image
+                          source={require("../assets/images/camera.jpg")}
+                        />
+                      </Pressable>
+                    </View>
+                  </CameraView>
+                )}
               </View>
-              <Text style={styles.text}></Text>
+              {uriImage ? (
+                <Pressable onPress={() => setUriImage("")} style={styles.text}>
+                  <Text>Редагувати фото</Text>
+                </Pressable>
+              ) : (
+                <Text style={styles.text}>Завантажте</Text>
+              )}
+
               <View style={styles.form}>
                 <TextInput
                   style={styles.input}
@@ -126,7 +153,7 @@ const CreatePosts = () => {
               </View>
               <Button
                 title="Опублікувати"
-                disable={!title || !location}
+                disable={!title || !location || !uriImage}
                 onPress={handleCreatingPost}
               />
             </View>

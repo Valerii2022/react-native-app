@@ -17,7 +17,6 @@ const Map = ({ route }) => {
       if (status !== "granted") {
         console.log("Permission to access location was denied");
       }
-      // let location = await Location.getCurrentPositionAsync({});
 
       const currentPost = tempPosts.find((post) => post.id === route.params.id);
 
