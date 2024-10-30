@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Alert,
   View,
   Text,
   Pressable,
@@ -11,6 +12,8 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config";
 
 import { commonStyles } from "../styles/common";
 import Button from "../components/Button";
@@ -27,7 +30,25 @@ const Login = () => {
     setForm({ ...form, [name]: value });
   };
 
+  const loginDB = async ({ email, password }) => {
+    try {
+      const credentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      return credentials.user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const handleSubmitForm = () => {
+    if (email === "" || password === "") {
+      Alert.alert("Всі поля обов'язкові для заповнення!");
+      return;
+    }
+    loginDB({ email, password });
     console.log(`Електронна пошта: ${email}, пароль: ${password}`);
     setForm({ email: "", password: "" });
     navigation.navigate("Home");

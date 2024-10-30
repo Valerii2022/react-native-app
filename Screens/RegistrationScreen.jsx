@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Alert,
   View,
   Text,
   Image,
@@ -12,6 +13,12 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../config";
 
 import { colors, commonStyles } from "../styles/common";
 
@@ -25,11 +32,56 @@ const Registration = () => {
 
   const navigation = useNavigation();
 
+  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
   const handleInputChange = (name, value) => {
     setForm({ ...form, [name]: value });
   };
 
+  const registerDB = async ({ email, password }) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const updateUserProfile = async (update) => {
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        await updateProfile(user, update);
+      } catch (error) {
+        throw error;
+      }
+    }
+  };
+
+  const authStateChanged = async (onChange = () => {}) => {
+    onAuthStateChanged((user) => {
+      onChange(user);
+    });
+  };
+
   const handleSubmitForm = () => {
+    if (name === "" || email === "" || password === "") {
+      Alert.alert("Всі поля обов'язкові для заповнення!");
+      return;
+    }
+    if (reg.test(email) === false) {
+      Alert.alert("Невірний формат адреси електронної пошти!");
+      return;
+    }
+    if (name.length < 6) {
+      Alert.alert("Логін має бути довжиною мінімум 6 символів!!");
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert("Пароль має бути довжиною мінімум 6 символів!!");
+      return;
+    }
+    registerDB({ email, password });
     console.log(
       `Логін: ${name}, електронна пошта: ${email}, пароль:${password}`
     );
