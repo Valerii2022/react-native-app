@@ -1,7 +1,10 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, Text } from "react-native";
 import { useFonts } from "expo-font";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "./redux/store";
 
 import { commonStyles } from "./styles/common";
 
@@ -19,10 +22,14 @@ const App = () => {
   }
 
   return (
-    <View style={commonStyles.container}>
-      <MainStack />
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+        <View style={commonStyles.container}>
+          <MainStack />
+          <StatusBar style="auto" />
+        </View>
+      </PersistGate>
+    </Provider>
   );
 };
 
