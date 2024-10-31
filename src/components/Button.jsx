@@ -1,5 +1,5 @@
 import { Text, Pressable, StyleSheet, ActivityIndicator } from "react-native";
-import { colors } from "../styles/common";
+import { colors } from "../../styles/common";
 
 const Button = ({ title, buttonStyles, onPress, disable, loader }) => {
   return (

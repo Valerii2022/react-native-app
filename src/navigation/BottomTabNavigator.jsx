@@ -7,10 +7,14 @@ import { colors } from "../../styles/common";
 import Posts from "../Screens/PostsScreen";
 import CreatePosts from "../Screens/CreatePostsScreen";
 import Profile from "../Screens/ProfileScreen";
+import { logoutDB } from "../utils/auth";
+import { useDispatch } from "react-redux";
 
 const Tabs = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const dispatch = useDispatch();
+
   return (
     <Tabs.Navigator
       initialRouteName="Публікації"
@@ -32,11 +36,14 @@ const TabNavigator = () => {
           headerRight: () => {
             return (
               <Pressable
-                onPress={() => navigation.navigate("Login")}
+                onPress={() => {
+                  logoutDB(dispatch);
+                  navigation.navigate("Login");
+                }}
                 style={styles.logoutIcon}
               >
                 <Image
-                  source={require("../assets/images/log-out.png")}
+                  source={require("../../assets/images/log-out.png")}
                   style={{ width: 24, height: 24 }}
                 />
               </Pressable>
@@ -44,7 +51,7 @@ const TabNavigator = () => {
           },
           tabBarIcon: () => (
             <Image
-              source={require("../assets/images/grid.png")}
+              source={require("../../assets/images/grid.png")}
               style={styles.icon}
             />
           ),
@@ -65,7 +72,7 @@ const TabNavigator = () => {
                 style={styles.backIcon}
               >
                 <Image
-                  source={require("../assets/images/back.png")}
+                  source={require("../../assets/images/back.png")}
                   style={{ width: 24, height: 24 }}
                 />
               </Pressable>
@@ -86,8 +93,8 @@ const TabNavigator = () => {
                 <Image
                   source={
                     index === 0
-                      ? require("../assets/images/union.png")
-                      : require("../assets/images/user-white.png")
+                      ? require("../../assets/images/union.png")
+                      : require("../../assets/images/user-white.png")
                   }
                   style={styles.icon}
                 />
@@ -115,8 +122,8 @@ const TabNavigator = () => {
                 <Image
                   source={
                     index === 2
-                      ? require("../assets/images/union-dark.png")
-                      : require("../assets/images/user.png")
+                      ? require("../../assets/images/union-dark.png")
+                      : require("../../assets/images/user.png")
                   }
                   style={styles.icon}
                 />

@@ -8,44 +8,52 @@ import {
   ScrollView,
 } from "react-native";
 
-import { colors, commonStyles } from "../styles/common";
+import { colors, commonStyles } from "../../styles/common";
 
-import { tempPosts } from "../assets/tempData/posts";
+import { tempPosts } from "../../assets/tempData/posts";
 import PostItem from "../components/PostItem";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser } from "../redux/slices/userSlice";
+import { logoutDB } from "../utils/auth";
 
 const Profile = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const user = useSelector(currentUser);
 
   return (
     <ScrollView style={commonStyles.container}>
       <ImageBackground
-        source={require("../assets/images/sign-up-BG.png")}
+        source={require("../../assets/images/sign-up-BG.png")}
         resizeMode="cover"
         style={styles.backgroundImage}
       >
         <View style={styles.contentWrapper}>
-          <Pressable onPress={() => navigation.navigate("Login")}>
+          <Pressable
+            onPress={() => {
+              logoutDB(dispatch);
+              navigation.navigate("Login");
+            }}
+          >
             <Image
               style={styles.logOutBtn}
-              source={require("../assets/images/log-out.png")}
+              source={require("../../assets/images/log-out.png")}
             />
           </Pressable>
           <View style={styles.imageWrapper}>
             <Image
               style={styles.avatar}
-              source={require("../assets/images/avatar.jpg")}
+              source={require("../../assets/images/avatar.jpg")}
             />
             <Pressable>
               <Image
                 style={styles.addButton}
-                source={require("../assets/images/delete.png")}
+                source={require("../../assets/images/delete.png")}
               />
             </Pressable>
           </View>
-          <Text style={[commonStyles.title, styles.title]}>
-            Natali Romanova
-          </Text>
+          <Text style={[commonStyles.title, styles.title]}>{user?.name}</Text>
           <View style={styles.postWrapper}>
             {tempPosts.length > 0 &&
               tempPosts.map((item) => {

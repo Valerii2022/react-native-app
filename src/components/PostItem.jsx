@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { colors } from "../styles/common";
+import { colors } from "../../styles/common";
 
 const PostItem = ({ post, isLiked }) => {
   const { id, url, title, comments, map, likes, location } = post;
@@ -26,8 +26,8 @@ const PostItem = ({ post, isLiked }) => {
             <Image
               source={
                 comments.length === 0
-                  ? require("../assets/images/message.png")
-                  : require("../assets/images/message-orange.png")
+                  ? require("../../assets/images/message.png")
+                  : require("../../assets/images/message-orange.png")
               }
               style={styles.icon}
             />
@@ -45,8 +45,8 @@ const PostItem = ({ post, isLiked }) => {
               <Image
                 source={
                   likes > 0
-                    ? require("../assets/images/like.png")
-                    : require("../assets/images/no-likes.png")
+                    ? require("../../assets/images/like.png")
+                    : require("../../assets/images/no-likes.png")
                 }
                 style={styles.icon}
               />
@@ -63,7 +63,7 @@ const PostItem = ({ post, isLiked }) => {
           onPress={() => navigation.navigate("Map", { id })}
         >
           <Image
-            source={require("../assets/images/map.png")}
+            source={require("../../assets/images/map.png")}
             style={styles.icon}
           />
           <Text style={styles.map}>{map}</Text>

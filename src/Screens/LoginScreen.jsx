@@ -12,23 +12,19 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { currentUser } from "../redux/slices/userSlice";
-import { authorized } from "../redux/slices/authSlice";
-
-import { commonStyles } from "../styles/common";
+import { commonStyles } from "../../styles/common";
 import Button from "../components/Button";
 
 import Input from "../components/Input";
+import { loginDB } from "../utils/auth";
 
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const user = useSelector(currentUser);
 
+  const [loader, setLoader] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
   const { email, password } = form;
 
@@ -36,37 +32,25 @@ const Login = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const loginDB = async ({ email, password }) => {
-    try {
-      const credentials = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      return credentials.user;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     if (email === "" || password === "") {
       Alert.alert("Всі поля обов'язкові для заповнення!");
       return;
     }
-    if (!user) {
-      Alert.alert("Користувача не знайдено!");
-      return;
+    setLoader(true);
+    try {
+      const response = await loginDB({ email, password, dispatch });
+      if (typeof response === "string") {
+        Alert.alert(response);
+        return;
+      }
+      setForm({ email: "", password: "" });
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(error);
+    } finally {
+      setLoader(false);
     }
-    if (user.password !== password) {
-      Alert.alert("Невірний пароль!");
-      return;
-    }
-    // loginDB({ email, password });
-    console.log(`Електронна пошта: ${email}, пароль: ${password}`);
-    dispatch(authorized());
-    setForm({ email: "", password: "" });
-    navigation.navigate("Home");
   };
 
   return (
@@ -74,10 +58,10 @@ const Login = () => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={-208}
+        // keyboardVerticalOffset={-208}
       >
         <ImageBackground
-          source={require("../assets/images/sign-up-BG.png")}
+          source={require("../../assets/images/sign-up-BG.png")}
           resizeMode="cover"
           style={styles.backgroundImage}
         >
@@ -103,6 +87,7 @@ const Login = () => {
               title="Увійти"
               onPress={handleSubmitForm}
               buttonStyles={styles.button}
+              loader={loader}
             />
             <View style={commonStyles.accentTextWrapper}>
               <Text style={commonStyles.accentText}>Немає акаунту?</Text>

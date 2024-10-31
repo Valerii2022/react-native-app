@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { persistReducer } from "redux-persist";
 
 const userSlice = createSlice({
   name: "user",
   initialState: { userInfo: null },
   reducers: {
     add(state, action) {
-      state.user.userInfo = action.payload;
+      state.userInfo = action.payload;
     },
     remove(state) {
-      state.user = null;
+      state.userInfo = null;
     },
   },
 });

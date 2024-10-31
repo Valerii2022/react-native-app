@@ -17,7 +17,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 
-import { colors, commonStyles } from "../styles/common";
+import { colors, commonStyles } from "../../styles/common";
 import Button from "../components/Button";
 
 const CreatePosts = () => {
@@ -113,7 +113,7 @@ const CreatePosts = () => {
                     <View style={styles.cameraWrapper}>
                       <Pressable onPress={takePhoto}>
                         <Image
-                          source={require("../assets/images/camera.jpg")}
+                          source={require("../../assets/images/camera.jpg")}
                         />
                       </Pressable>
                     </View>
@@ -144,7 +144,7 @@ const CreatePosts = () => {
                   />
                   <Image
                     style={[styles.mapIcon, styles.icon]}
-                    source={require("../assets/images/map.png")}
+                    source={require("../../assets/images/map.png")}
                   />
                 </View>
               </View>
@@ -163,7 +163,7 @@ const CreatePosts = () => {
               }}
             >
               <Image
-                source={require("../assets/images/trash.png")}
+                source={require("../../assets/images/trash.png")}
                 style={styles.icon}
               />
             </Pressable>

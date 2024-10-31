@@ -11,26 +11,18 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-  // createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  updateProfile,
-} from "firebase/auth";
-import { auth } from "../../config";
-import { useDispatch } from "react-redux";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
-import { add } from "../redux/slices/userSlice";
-import { authorized } from "../redux/slices/authSlice";
-
 import { colors, commonStyles } from "../../styles/common";
 
-import Button from "../../components/Button";
-import Input from "../../components/Input";
+import Button from "../components/Button";
+import Input from "../components/Input";
+import { registerDB } from "../utils/auth";
+import { useDispatch } from "react-redux";
+import { add } from "../redux/slices/userSlice";
 
 const Registration = () => {
   const [uriImage, setUriImage] = useState(
@@ -50,6 +42,7 @@ const Registration = () => {
   const cameraRef = useRef();
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
   if (camera) {
     if (!permission) {
       return <View />;
@@ -88,51 +81,15 @@ const Registration = () => {
     }
   };
 
-  function toggleCameraFacing() {
+  const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
-  }
+  };
 
   const handleInputChange = (name, value) => {
     setForm({ ...form, [name]: value });
   };
 
-  const registerDB = async ({ email, password }) => {
-    setLoader(true);
-    try {
-      // await createUserWithEmailAndPassword(auth, email, password);
-      console.log(
-        `Логін: ${name}, електронна пошта: ${email}, пароль:${password}`
-      );
-      dispatch(add({ name, email, password }));
-      dispatch(authorized());
-      setForm({ name: "", email: "", password: "" });
-      navigation.navigate("Home");
-    } catch (error) {
-      Alert.alert(error.message);
-    } finally {
-      setLoader(false);
-    }
-  };
-
-  const updateUserProfile = async (update) => {
-    const user = auth.currentUser;
-
-    if (user) {
-      try {
-        await updateProfile(user, update);
-      } catch (error) {
-        throw error;
-      }
-    }
-  };
-
-  const authStateChanged = async (onChange = () => {}) => {
-    onAuthStateChanged((user) => {
-      onChange(user);
-    });
-  };
-
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     if (name === "" || email === "" || password === "") {
       Alert.alert("Всі поля обов'язкові для заповнення!");
       return;
@@ -142,14 +99,28 @@ const Registration = () => {
       return;
     }
     if (name.length < 4) {
-      Alert.alert("Логін має бути довжиною мінімум 4 символи!!");
+      Alert.alert("Логін має бути довжиною мінімум 4 символи!");
       return;
     }
     if (password.length < 6) {
-      Alert.alert("Пароль має бути довжиною мінімум 6 символів!!");
+      Alert.alert("Пароль має бути довжиною мінімум 6 символів!");
       return;
     }
-    registerDB({ email, password });
+    setLoader(true);
+    try {
+      const response = await registerDB({ email, password, name });
+      if (typeof response === "string") {
+        Alert.alert(response);
+        return;
+      }
+      dispatch(add(response));
+      setForm({ name: "", email: "", password: "" });
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(error);
+    } finally {
+      setLoader(false);
+    }
   };
 
   return (
@@ -157,10 +128,10 @@ const Registration = () => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={-142}
+        // keyboardVerticalOffset={-142}
       >
         <ImageBackground
-          source={require("../assets/images/sign-up-BG.png")}
+          source={require("../../assets/images/sign-up-BG.png")}
           resizeMode="cover"
           style={styles.backgroundImage}
         >
@@ -180,7 +151,9 @@ const Registration = () => {
                   </Pressable>
                   <View style={styles.cameraWrapper}>
                     <Pressable onPress={takePhoto}>
-                      <Image source={require("../assets/images/camera.jpg")} />
+                      <Image
+                        source={require("../../assets/images/camera.jpg")}
+                      />
                     </Pressable>
                   </View>
                 </CameraView>
@@ -196,8 +169,8 @@ const Registration = () => {
                   style={[styles.addButton, camera && styles.rotate]}
                   source={
                     camera
-                      ? require("../assets/images/delete.png")
-                      : require("../assets/images/add.png")
+                      ? require("../../assets/images/delete.png")
+                      : require("../../assets/images/add.png")
                   }
                 />
               </Pressable>

@@ -16,9 +16,9 @@ import dayjs from "dayjs";
 import "dayjs/locale/uk";
 import utc from "dayjs/plugin/utc";
 
-import { colors, commonStyles } from "../styles/common";
+import { colors, commonStyles } from "../../styles/common";
 
-import { tempPosts } from "../assets/tempData/posts";
+import { tempPosts } from "../../assets/tempData/posts";
 
 dayjs.extend(utc);
 
@@ -90,7 +90,7 @@ const Comments = ({ route }) => {
               />
               <Pressable style={styles.addCommentBtn}>
                 <Image
-                  source={require("../assets/images/arrow-up.png")}
+                  source={require("../../assets/images/arrow-up.png")}
                   style={{ width: 10, height: 14 }}
                 />
               </Pressable>

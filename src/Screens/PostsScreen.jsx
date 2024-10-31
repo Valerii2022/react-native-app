@@ -1,11 +1,15 @@
 import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
 
-import { colors } from "../styles/common";
+import { colors } from "../../styles/common";
 
-import { tempPosts } from "../assets/tempData/posts";
+import { tempPosts } from "../../assets/tempData/posts";
 import PostItem from "../components/PostItem";
+import { useSelector } from "react-redux";
+import { currentUser } from "../redux/slices/userSlice";
 
 const Posts = () => {
+  const user = useSelector(currentUser);
+
   return (
     <>
       <ScrollView style={styles.scrollContainer}>
@@ -13,12 +17,12 @@ const Posts = () => {
           <View style={styles.avatarWrapper}>
             <Image
               style={styles.avatar}
-              source={require("../assets/images/avatar.jpg")}
+              source={require("../../assets/images/avatar.jpg")}
             />
           </View>
           <View>
-            <Text style={styles.name}>Natali Romanova</Text>
-            <Text style={styles.email}>email@example.com</Text>
+            <Text style={styles.name}>{user?.name}</Text>
+            <Text style={styles.email}>{user?.email}</Text>
           </View>
         </View>
         <View style={styles.postWrapper}>

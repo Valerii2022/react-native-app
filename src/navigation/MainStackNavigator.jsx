@@ -48,7 +48,7 @@ const MainStack = () => {
                   style={{ marginLeft: 10 }}
                 >
                   <Image
-                    source={require("../assets/images/back.png")}
+                    source={require("../../assets/images/back.png")}
                     style={styles.icon}
                   />
                 </Pressable>
@@ -73,7 +73,7 @@ const MainStack = () => {
                   style={{ marginLeft: 10 }}
                 >
                   <Image
-                    source={require("../assets/images/back.png")}
+                    source={require("../../assets/images/back.png")}
                     style={styles.icon}
                   />
                 </Pressable>

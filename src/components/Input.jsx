@@ -1,5 +1,5 @@
 import { Pressable, Text, TextInput, View, StyleSheet } from "react-native";
-import { colors, commonStyles } from "../styles/common";
+import { colors, commonStyles } from "../../styles/common";
 import { useState } from "react";
 
 const Input = ({

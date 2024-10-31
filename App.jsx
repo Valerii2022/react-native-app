@@ -2,13 +2,15 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { View, ActivityIndicator, Text } from "react-native";
 import { useFonts } from "expo-font";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { persistor, store } from "./redux/store";
 
 import { commonStyles } from "./styles/common";
 
-import MainStack from "./navigation/MainStackNavigator";
+import { persistor, store } from "./src/redux/store.js";
+import MainStack from "./src/navigation/MainStackNavigator";
+import { useEffect } from "react";
+import { authStateChanged } from "./src/utils/auth.js";
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -24,12 +26,24 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
-        <View style={commonStyles.container}>
-          <MainStack />
-          <StatusBar style="auto" />
-        </View>
+        <AuthListener />
       </PersistGate>
     </Provider>
+  );
+};
+
+const AuthListener = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    authStateChanged(dispatch);
+  }, [dispatch]);
+
+  return (
+    <View style={commonStyles.container}>
+      <MainStack />
+      <StatusBar style="auto" />
+    </View>
   );
 };
 
