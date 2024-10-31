@@ -3,9 +3,9 @@ import { StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
-import { colors } from "../styles/common";
+import { colors } from "../../styles/common";
 
-import { tempPosts } from "../assets/tempData/posts";
+import { tempPosts } from "../../assets/tempData/posts";
 
 const Map = ({ route }) => {
   const [location, setLocation] = useState(null);

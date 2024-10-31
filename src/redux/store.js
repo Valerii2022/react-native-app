@@ -8,21 +8,13 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import {
-  usersReducer,
-  authReducer,
-//   postsReducer,
-//   currentPostsReducer,
-//   commentsReducer,
-} from "./rootReducer";
+import { userReducer } from "./slices/userSlice";
+import { authReducer } from "./slices/authSlice";
 
 export const store = configureStore({
   reducer: {
-    users: usersReducer,
+    user: userReducer,
     isAuth: authReducer,
-    // posts: postsReducer,
-    // currentPosts: currentPostsReducer,
-    // comments: commentsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

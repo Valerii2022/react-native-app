@@ -2,7 +2,7 @@ import { Image, Pressable, StyleSheet } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { colors } from "../styles/common";
+import { colors } from "../../styles/common";
 
 import Login from "../Screens/LoginScreen";
 import Registration from "../Screens/RegistrationScreen";

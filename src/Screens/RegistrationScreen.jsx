@@ -15,21 +15,22 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
-  createUserWithEmailAndPassword,
+  // createUserWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../config";
+import { auth } from "../../config";
 import { useDispatch } from "react-redux";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 
-import { add, authorized } from "../redux/rootReducer";
+import { add } from "../redux/slices/userSlice";
+import { authorized } from "../redux/slices/authSlice";
 
-import { colors, commonStyles } from "../styles/common";
+import { colors, commonStyles } from "../../styles/common";
 
-import Button from "../components/Button";
-import Input from "../components/Input";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
 
 const Registration = () => {
   const [uriImage, setUriImage] = useState(

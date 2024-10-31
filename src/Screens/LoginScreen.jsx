@@ -16,7 +16,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config";
 import { useDispatch, useSelector } from "react-redux";
 
-import { authorized, usersNames } from "../redux/rootReducer";
+import { currentUser } from "../redux/slices/userSlice";
+import { authorized } from "../redux/slices/authSlice";
 
 import { commonStyles } from "../styles/common";
 import Button from "../components/Button";
@@ -26,7 +27,7 @@ import Input from "../components/Input";
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const users = useSelector(usersNames);
+  const user = useSelector(currentUser);
 
   const [form, setForm] = useState({ email: "", password: "" });
   const { email, password } = form;
@@ -53,12 +54,11 @@ const Login = () => {
       Alert.alert("Всі поля обов'язкові для заповнення!");
       return;
     }
-    const currentUser = users.find((user) => user.email === email);
-    if (!currentUser) {
+    if (!user) {
       Alert.alert("Користувача не знайдено!");
       return;
     }
-    if (currentUser.password !== password) {
+    if (user.password !== password) {
       Alert.alert("Невірний пароль!");
       return;
     }

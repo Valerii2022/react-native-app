@@ -2,7 +2,7 @@ import React from "react";
 import { Image, StyleSheet, View, Pressable, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { colors } from "../styles/common";
+import { colors } from "../../styles/common";
 
 import Posts from "../Screens/PostsScreen";
 import CreatePosts from "../Screens/CreatePostsScreen";
