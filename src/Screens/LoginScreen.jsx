@@ -15,8 +15,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 
 import { commonStyles } from "../../styles/common";
-import Button from "../components/Button";
 
+import Button from "../components/Button";
 import Input from "../components/Input";
 import { loginDB } from "../utils/auth";
 

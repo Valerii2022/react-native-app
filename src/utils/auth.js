@@ -5,6 +5,7 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
+
 import { auth } from "../../config";
 import { add, remove } from "../redux/slices/userSlice";
 
@@ -46,7 +47,6 @@ export const logoutDB = async (dispatch) => {
   }
 };
 
-// Відстеження змін у стані аутентифікації
 export const authStateChanged = (dispatch) => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -54,6 +54,7 @@ export const authStateChanged = (dispatch) => {
         add({
           uid: user.uid,
           email: user.email,
+          name: user.displayName,
         })
       );
     } else {
@@ -62,7 +63,6 @@ export const authStateChanged = (dispatch) => {
   });
 };
 
-// Оновлення профілю користувача
 export const updateUserProfile = async (update) => {
   const user = auth.currentUser;
   if (user) {

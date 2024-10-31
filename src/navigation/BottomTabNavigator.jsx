@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, StyleSheet, View, Pressable, Platform } from "react-native";
+import { useDispatch } from "react-redux";
+import { Image, StyleSheet, Pressable, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { colors } from "../../styles/common";
@@ -8,7 +9,6 @@ import Posts from "../Screens/PostsScreen";
 import CreatePosts from "../Screens/CreatePostsScreen";
 import Profile from "../Screens/ProfileScreen";
 import { logoutDB } from "../utils/auth";
-import { useDispatch } from "react-redux";
 
 const Tabs = createBottomTabNavigator();
 

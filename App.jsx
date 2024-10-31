@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { View, ActivityIndicator, Text } from "react-native";
@@ -9,7 +10,6 @@ import { commonStyles } from "./styles/common";
 
 import { persistor, store } from "./src/redux/store.js";
 import MainStack from "./src/navigation/MainStackNavigator";
-import { useEffect } from "react";
 import { authStateChanged } from "./src/utils/auth.js";
 
 const App = () => {

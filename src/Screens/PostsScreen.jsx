@@ -1,10 +1,10 @@
 import { Text, View, Image, StyleSheet, ScrollView } from "react-native";
+import { useSelector } from "react-redux";
 
 import { colors } from "../../styles/common";
 
 import { tempPosts } from "../../assets/tempData/posts";
 import PostItem from "../components/PostItem";
-import { useSelector } from "react-redux";
 import { currentUser } from "../redux/slices/userSlice";
 
 const Posts = () => {

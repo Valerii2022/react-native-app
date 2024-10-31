@@ -15,13 +15,13 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import { useDispatch } from "react-redux";
 
 import { colors, commonStyles } from "../../styles/common";
 
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { registerDB } from "../utils/auth";
-import { useDispatch } from "react-redux";
 import { add } from "../redux/slices/userSlice";
 
 const Registration = () => {

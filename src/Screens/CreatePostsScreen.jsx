@@ -18,6 +18,7 @@ import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 
 import { colors, commonStyles } from "../../styles/common";
+
 import Button from "../components/Button";
 
 const CreatePosts = () => {

@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { Image, Pressable, StyleSheet } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -9,13 +10,16 @@ import Registration from "../Screens/RegistrationScreen";
 import Comments from "../Screens/CommentsScreen";
 import Map from "../Screens/MapScreen";
 import TabNavigator from "./BottomTabNavigator";
+import { currentUser } from "../redux/slices/userSlice";
 
 const Stack = createStackNavigator();
 
 const MainStack = () => {
+  const user = useSelector(currentUser);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName={user ? "Home" : "Login"}>
         <Stack.Screen
           name="Login"
           component={Login}

@@ -7,13 +7,13 @@ import {
   Text,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 
 import { colors, commonStyles } from "../../styles/common";
 
 import { tempPosts } from "../../assets/tempData/posts";
 import PostItem from "../components/PostItem";
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
 import { currentUser } from "../redux/slices/userSlice";
 import { logoutDB } from "../utils/auth";
 
