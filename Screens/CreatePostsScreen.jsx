@@ -81,10 +81,7 @@ const CreatePosts = () => {
     console.log("image", uriImage);
     console.log("title", title);
     console.log("location", location);
-    console.log("coords", {
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-    });
+    console.log("coords", coordinates);
     navigation.navigate("Публікації");
   };
 

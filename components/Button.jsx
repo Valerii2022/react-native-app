@@ -1,7 +1,7 @@
-import { Text, Pressable, StyleSheet } from "react-native";
+import { Text, Pressable, StyleSheet, ActivityIndicator } from "react-native";
 import { colors } from "../styles/common";
 
-const Button = ({ title, buttonStyles, onPress, disable }) => {
+const Button = ({ title, buttonStyles, onPress, disable, loader }) => {
   return (
     <Pressable
       style={[
@@ -11,9 +11,13 @@ const Button = ({ title, buttonStyles, onPress, disable }) => {
       ]}
       onPress={disable ? () => {} : onPress}
     >
-      <Text style={[styles.buttonText, disable && styles.disableTextColor]}>
-        {title}
-      </Text>
+      {loader ? (
+        <ActivityIndicator size="large" color={colors.white} />
+      ) : (
+        <Text style={[styles.buttonText, disable && styles.disableTextColor]}>
+          {title}
+        </Text>
+      )}
     </Pressable>
   );
 };

@@ -98,16 +98,16 @@ export const authReducer = persistReducer(persistConfig, authSlice.reducer);
 // );
 
 // export const rootReducer = usersSlice.reducer;
-// export const { add, remove } = usersSlice.actions;
-// export const { authorized, unauthorized } = authSlice.actions;
+export const { add, remove } = usersSlice.actions;
+export const { authorized, unauthorized } = authSlice.actions;
 // export const { addPost, removePost, addComment } = postsSlice.actions;
 // export const { addCurrentPosts } = currentUserPostsSlice.actions;
 // export const { addCurrentComments, removeCurrentComments } =
 //   commentsSlice.actions;
 
 // Selectors
-// export const usersNames = (state) => state.users.users;
-// export const currentAuth = (state) => state.isAuth.isAuth;
+export const usersNames = (state) => state.users.users;
+export const currentAuth = (state) => state.isAuth.isAuth;
 // export const allPosts = (state) => state.posts.posts;
 // export const currentPosts = (state) => state.currentPosts.currentPosts;
 // export const currentComments = (state) => state.comments.comments;

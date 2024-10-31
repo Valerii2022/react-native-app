@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Alert,
   View,
@@ -11,6 +11,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -19,6 +20,11 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../config";
+import { useDispatch } from "react-redux";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+
+import { add, authorized } from "../redux/rootReducer";
 
 import { colors, commonStyles } from "../styles/common";
 
@@ -26,23 +32,84 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 
 const Registration = () => {
-  const [image, setImage] = useState(false);
+  const [uriImage, setUriImage] = useState(
+    "http://www.caccd.com/Image/dummy.jpg"
+  );
+  const [facing, setFacing] = useState("back");
+  const [camera, setCamera] = useState(false);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [mediaLibraryPermission, setMediaLibraryPermission] = useState(null);
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [loader, setLoader] = useState(false);
+
   const { name, email, password } = form;
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const cameraRef = useRef();
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  if (camera) {
+    if (!permission) {
+      return <View />;
+    }
+
+    if (!permission.granted) {
+      return (
+        <View style={styles.messageContainer}>
+          <Text style={styles.message}>
+            Нам потрібен Ваш дозвіл, щоб показати камеру
+          </Text>
+          <Button onPress={requestPermission} title="Надати доступ" />
+        </View>
+      );
+    }
+  }
+
+  const requestMediaLibraryPermission = async () => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    setMediaLibraryPermission(status === "granted");
+  };
+
+  const takePhoto = async () => {
+    if (!camera) return;
+
+    if (mediaLibraryPermission === null) {
+      await requestMediaLibraryPermission();
+    }
+
+    if (mediaLibraryPermission) {
+      const image = await camera?.current?.takePictureAsync();
+      await MediaLibrary.saveToLibraryAsync(image.uri);
+      setUriImage(image.uri);
+    } else {
+      alert("Доступ до медіатеки не надано");
+    }
+  };
+
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
 
   const handleInputChange = (name, value) => {
     setForm({ ...form, [name]: value });
   };
 
   const registerDB = async ({ email, password }) => {
+    setLoader(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      // await createUserWithEmailAndPassword(auth, email, password);
+      console.log(
+        `Логін: ${name}, електронна пошта: ${email}, пароль:${password}`
+      );
+      dispatch(add({ name, email, password }));
+      dispatch(authorized());
+      setForm({ name: "", email: "", password: "" });
+      navigation.navigate("Home");
     } catch (error) {
-      throw error;
+      Alert.alert(error.message);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -73,8 +140,8 @@ const Registration = () => {
       Alert.alert("Невірний формат адреси електронної пошти!");
       return;
     }
-    if (name.length < 6) {
-      Alert.alert("Логін має бути довжиною мінімум 6 символів!!");
+    if (name.length < 4) {
+      Alert.alert("Логін має бути довжиною мінімум 4 символи!!");
       return;
     }
     if (password.length < 6) {
@@ -82,11 +149,6 @@ const Registration = () => {
       return;
     }
     registerDB({ email, password });
-    console.log(
-      `Логін: ${name}, електронна пошта: ${email}, пароль:${password}`
-    );
-    setForm({ name: "", email: "", password: "" });
-    navigation.navigate("Home");
   };
 
   return (
@@ -103,11 +165,36 @@ const Registration = () => {
         >
           <View style={styles.formWrapper}>
             <View style={styles.imageWrapper}>
-              <Pressable onPress={() => setImage(!image)}>
+              {camera ? (
+                <CameraView
+                  ref={cameraRef}
+                  style={styles.camera}
+                  facing={facing}
+                >
+                  <Pressable
+                    style={styles.flipBtn}
+                    onPress={toggleCameraFacing}
+                  >
+                    <Text style={styles.text}>Flip</Text>
+                  </Pressable>
+                  <View style={styles.cameraWrapper}>
+                    <Pressable onPress={takePhoto}>
+                      <Image source={require("../assets/images/camera.jpg")} />
+                    </Pressable>
+                  </View>
+                </CameraView>
+              ) : (
+                <Image source={{ uri: uriImage }} style={styles.avatar} />
+              )}
+              <Pressable
+                onPress={() => {
+                  setCamera(!camera);
+                }}
+              >
                 <Image
-                  style={[styles.addButton, image && styles.rotate]}
+                  style={[styles.addButton, camera && styles.rotate]}
                   source={
-                    image
+                    camera
                       ? require("../assets/images/delete.png")
                       : require("../assets/images/add.png")
                   }
@@ -142,6 +229,7 @@ const Registration = () => {
               title="Зареєструватися"
               onPress={handleSubmitForm}
               buttonStyles={styles.button}
+              loader={loader}
             />
             <View style={commonStyles.accentTextWrapper}>
               <Text style={commonStyles.accentText}>Вже є акаунт?</Text>
@@ -159,6 +247,40 @@ const Registration = () => {
 };
 
 const styles = StyleSheet.create({
+  messageContainer: {
+    flex: 1,
+    justifyContent: "center",
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  message: {
+    textAlign: "center",
+    fontFamily: "RobotoRegular",
+    fontSize: 20,
+    marginBottom: 16,
+  },
+  camera: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  flipBtn: { position: "absolute", top: 8, right: 8 },
+  cameraWrapper: {
+    backgroundColor: "rgba(255,255,255,0.3)",
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    fontFamily: "RobotoRegular",
+    fontSize: 16,
+    color: colors.placeholder,
+    marginBottom: 32,
+  },
   container: { flex: 1 },
   backgroundImage: {
     flex: 1,
@@ -181,12 +303,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 120,
     height: 120,
-    borderRadius: 16,
     backgroundColor: colors.backgroundGray,
+    borderRadius: 16,
   },
+  avatar: { width: "100%", height: "100%", borderRadius: 16 },
   addButton: {
     position: "absolute",
-    top: 80,
+    top: -32,
     right: -12,
     width: 25,
     height: 25,
