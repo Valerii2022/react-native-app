@@ -10,7 +10,7 @@ import PostItem from "../components/PostItem";
 const Posts = () => {
   const user = useSelector(currentUser);
   const posts = useSelector(getPosts);
-  console.log(user);
+
   return (
     <>
       <ScrollView style={styles.scrollContainer}>

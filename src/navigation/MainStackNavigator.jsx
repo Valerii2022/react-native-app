@@ -37,7 +37,7 @@ const MainStack = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={"Login"}>
+      <Stack.Navigator initialRouteName={user ? "Home" : "Login"}>
         <Stack.Screen
           name="Home"
           component={TabNavigator}

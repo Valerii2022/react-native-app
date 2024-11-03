@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { CameraView } from "expo-camera";
 
 import { colors, commonStyles } from "../../styles/common";
 

@@ -67,13 +67,12 @@ const Comments = ({ route }) => {
     };
     const posts = [
       ...userPosts.map((post) => {
-        if (post.id !== currentPost.id) {
+        if (post.id === currentPost.id) {
           return updatedPost;
         } else {
           return post;
         }
       }),
-      updatedPost,
     ];
     const success = await updateDataInFirestore(user.uid, posts);
     if (success) {

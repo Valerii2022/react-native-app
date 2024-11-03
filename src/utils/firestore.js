@@ -2,15 +2,8 @@ import {
   doc,
   getDoc,
   setDoc,
-  updateDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-  arrayUnion,
 } from "firebase/firestore";
 import { db } from "../../config";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const addUser = async (userId, userData) => {
   try {
