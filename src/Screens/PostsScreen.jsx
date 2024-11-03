@@ -10,7 +10,7 @@ import PostItem from "../components/PostItem";
 const Posts = () => {
   const user = useSelector(currentUser);
   const posts = useSelector(getPosts);
-
+  console.log(user);
   return (
     <>
       <ScrollView style={styles.scrollContainer}>
@@ -18,18 +18,22 @@ const Posts = () => {
           <View style={styles.avatarWrapper}>
             <Image
               style={styles.avatar}
-              source={require("../../assets/images/avatar.jpg")}
+              source={{
+                uri: user?.photoUrl
+                  ? user.photoUrl
+                  : "http://www.caccd.com/Image/dummy.jpg",
+              }}
             />
           </View>
           <View>
-            <Text style={styles.name}>{user?.name}</Text>
+            <Text style={styles.name}>{user?.displayName}</Text>
             <Text style={styles.email}>{user?.email}</Text>
           </View>
         </View>
         <View style={styles.postWrapper}>
           {posts &&
             posts.map((item) => {
-              return <PostItem post={item} key={item.id} />;
+              return <PostItem uid={user?.uid} post={item} key={item.id} />;
             })}
         </View>
       </ScrollView>

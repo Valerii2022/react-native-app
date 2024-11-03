@@ -18,7 +18,7 @@ const TabNavigator = () => {
   return (
     <Tabs.Navigator
       initialRouteName="Публікації"
-      screenOptions={(navigation) => ({
+      screenOptions={() => ({
         tabBarShowLabel: false,
         tabBarStyle: [styles.tabStyles, styles.tabBottomStyles],
         tabBarItemStyle: { paddingTop: Platform.OS == "ios" && 10 },

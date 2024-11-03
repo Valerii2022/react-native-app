@@ -17,8 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
-import { db } from "../../config";
-import { setDoc, doc } from "firebase/firestore";
 
 import { colors, commonStyles } from "../../styles/common";
 

@@ -11,17 +11,27 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import dayjs from "dayjs";
 import "dayjs/locale/uk";
 import utc from "dayjs/plugin/utc";
 
 import { colors, commonStyles } from "../../styles/common";
+import { updateDataInFirestore } from "../utils/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser } from "../redux/slices/userSlice";
+import { addUserPosts, getPosts } from "../redux/slices/postsSlice";
 
 dayjs.extend(utc);
 
 const Comments = ({ route }) => {
+  const user = useSelector(currentUser);
+  const userPosts = useSelector(getPosts);
+  const dispatch = useDispatch();
+
   const [comment, setComment] = useState("");
+  const [allComments, setAllComments] = useState([]);
 
   const formatDateAndTime = (isoString) => {
     const date = dayjs.utc(isoString);
@@ -34,8 +44,45 @@ const Comments = ({ route }) => {
     return { formattedDate, time };
   };
 
-  const currentPost = route.params.post;
+  const currentPost = userPosts
+    ? userPosts.find((post) => post.id === route.params.id)
+    : null;
 
+  const addComment = async () => {
+    if (!comment) {
+      Alert.alert("Введіть коментар!");
+      return;
+    }
+    const id = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const newComment = {
+      id,
+      comment,
+      date: new Date().toISOString(),
+      owner: true,
+      avatar: user.photoUrl,
+    };
+    const updatedPost = {
+      ...currentPost,
+      comments: [...currentPost.comments, newComment],
+    };
+    const posts = [
+      ...userPosts.map((post) => {
+        if (post.id !== currentPost.id) {
+          return updatedPost;
+        } else {
+          return post;
+        }
+      }),
+      updatedPost,
+    ];
+    const success = await updateDataInFirestore(user.uid, posts);
+    if (success) {
+      dispatch(addUserPosts(posts));
+      setComment("");
+    } else {
+      Alert.alert("Виникла помилка!");
+    }
+  };
   return (
     <KeyboardAvoidingView
       style={[commonStyles.container, styles.container]}
@@ -44,55 +91,58 @@ const Comments = ({ route }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.inner}>
-            <Image style={styles.image} source={{ uri: currentPost.url }} />
-            <View style={styles.commentsWrapper}>
-              {currentPost &&
-                currentPost.comments.map(
-                  ({ id, comment, date, owner, avatar }) => {
-                    const { formattedDate, time } = formatDateAndTime(date);
-                    return (
-                      <View
-                        style={[owner ? styles.ownerComment : styles.comment]}
-                        key={id}
-                      >
-                        <View>
-                          <Image
-                            style={styles.avatar}
-                            source={{ uri: avatar }}
-                          />
-                        </View>
+            {currentPost && (
+              <>
+                <Image style={styles.image} source={{ uri: currentPost.url }} />
+                <View style={styles.commentsWrapper}>
+                  {currentPost.comments.map(
+                    ({ id, comment, date, owner, avatar }) => {
+                      const { formattedDate, time } = formatDateAndTime(date);
+                      return (
                         <View
-                          style={[
-                            styles.textContainer,
-                            owner && styles.ownerTextContainer,
-                          ]}
+                          style={[owner ? styles.ownerComment : styles.comment]}
+                          key={id}
                         >
-                          <Text style={styles.commentText}>{comment}</Text>
-                          <View style={styles.dateWrapper}>
-                            <Text style={styles.date}>{formattedDate}</Text>
-                            <Text style={styles.date}>|</Text>
-                            <Text style={styles.date}>{time}</Text>
+                          <View>
+                            <Image
+                              style={styles.avatar}
+                              source={{ uri: avatar }}
+                            />
+                          </View>
+                          <View
+                            style={[
+                              styles.textContainer,
+                              owner && styles.ownerTextContainer,
+                            ]}
+                          >
+                            <Text style={styles.commentText}>{comment}</Text>
+                            <View style={styles.dateWrapper}>
+                              <Text style={styles.date}>{formattedDate}</Text>
+                              <Text style={styles.date}>|</Text>
+                              <Text style={styles.date}>{time}</Text>
+                            </View>
                           </View>
                         </View>
-                      </View>
-                    );
-                  }
-                )}
-            </View>
-            <View style={styles.addCommentWrapper}>
-              <TextInput
-                style={styles.addCommentInput}
-                placeholder="Коментувати..."
-                value={comment}
-                onChangeText={(value) => setComment(value)}
-              />
-              <Pressable style={styles.addCommentBtn}>
-                <Image
-                  source={require("../../assets/images/arrow-up.png")}
-                  style={{ width: 10, height: 14 }}
-                />
-              </Pressable>
-            </View>
+                      );
+                    }
+                  )}
+                </View>
+                <View style={styles.addCommentWrapper}>
+                  <TextInput
+                    style={styles.addCommentInput}
+                    placeholder="Коментувати..."
+                    value={comment}
+                    onChangeText={(value) => setComment(value)}
+                  />
+                  <Pressable style={styles.addCommentBtn} onPress={addComment}>
+                    <Image
+                      source={require("../../assets/images/arrow-up.png")}
+                      style={{ width: 10, height: 14 }}
+                    />
+                  </Pressable>
+                </View>
+              </>
+            )}
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>

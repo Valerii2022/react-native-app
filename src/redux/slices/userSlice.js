@@ -9,6 +9,9 @@ const userSlice = createSlice({
     add(state, action) {
       state.userInfo = action.payload;
     },
+    updateUser(state, action) {
+      state.userInfo.photoUrl = action.payload;
+    },
     remove(state) {
       state.userInfo = null;
     },
@@ -22,6 +25,6 @@ const persistConfig = {
 
 export const userReducer = persistReducer(persistConfig, userSlice.reducer);
 
-export const { add, remove } = userSlice.actions;
+export const { add, remove, updateUser } = userSlice.actions;
 
 export const currentUser = (state) => state.user.userInfo;

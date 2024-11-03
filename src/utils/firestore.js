@@ -1,5 +1,16 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  arrayUnion,
+} from "firebase/firestore";
 import { db } from "../../config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const addUser = async (userId, userData) => {
   try {
@@ -16,6 +27,17 @@ export const getUserPosts = async (userId) => {
 
   if (docSnap.exists()) {
     return docSnap.data().posts;
+  } else {
+    return null;
+  }
+};
+
+export const getUser = async (userId) => {
+  const docRef = doc(db, "users", userId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data();
   } else {
     return null;
   }
@@ -52,20 +74,27 @@ export const writeDataToFirestore = async (
   }
 };
 
-// // Функція для запису даних користувача у Firestore
-// export const updateUserInFirestore = async (user) => {
-//   try {
-//     await setDoc(
-//       doc(db, "users", user.uid),
-//       {
-//         email: user.email,
-//         displayName: user.displayName || "Anonymous", // Якщо displayName недоступний
-//         lastLogin: new Date().toISOString(), // Додати дату останнього логіну
-//       },
-//       { merge: true }
-//     ); // merge: true - для оновлення існуючого документа або створення нового
-//     console.log("User data saved to Firestore:", user.uid);
-//   } catch (error) {
-//     console.error("Error saving user data to Firestore:", error);
-//   }
-// };
+export const updateDataInFirestore = async (uid, posts) => {
+  try {
+    await setDoc(doc(db, "posts", uid), { posts: posts });
+    return true;
+  } catch (e) {
+    console.error("Error adding document: ", e);
+    return null;
+  }
+};
+
+export const updateUserInFirestore = async (uid, photoUrl) => {
+  try {
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        photoUrl: photoUrl,
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (error) {
+    return null;
+  }
+};

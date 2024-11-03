@@ -9,18 +9,28 @@ import {
 import { auth } from "../../config";
 import { add, remove } from "../redux/slices/userSlice";
 import { removePosts } from "../redux/slices/postsSlice";
-import { addUser, getPosts } from "./firestore";
+import { addUser, getPosts, getUser } from "./firestore";
 import { addUserPosts } from "../redux/slices/postsSlice";
 
-export const registerDB = async ({ email, password, name }) => {
+export const registerDB = async ({ email, password, name, uriImage }) => {
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
-    await addUser(user.uid, { email: user.email, uid: user.uid, name });
-    return { uid: user.uid, email: user.email, name };
+    await addUser(user.uid, {
+      email: user.email,
+      uid: user.uid,
+      displayName: name,
+      photoUrl: uriImage,
+    });
+    return {
+      uid: user.uid,
+      email: user.email,
+      displayName: name,
+      photoUrl: uriImage,
+    };
   } catch (error) {
     return error.code;
   }
@@ -29,10 +39,12 @@ export const registerDB = async ({ email, password, name }) => {
 export const loginDB = async ({ email, password, dispatch }) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
+    const result = await getUser(user.uid);
     const currentUser = {
-      uid: user.uid,
-      email: user.email,
-      name: user.displayName,
+      uid: result.uid,
+      email: result.email,
+      displayName: result.displayName,
+      photoUrl: result.photoUrl,
     };
     const posts = await getPosts(user.uid);
     dispatch(add(currentUser));
@@ -56,17 +68,19 @@ export const logoutDB = async (dispatch) => {
 };
 
 export const authStateChanged = (dispatch) => {
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-      dispatch(
-        add({
-          uid: user.uid,
-          email: user.email,
-          name: user.displayName,
-        })
-      );
+      const result = await getUser(user.uid);
+      const currentUser = {
+        uid: result.uid,
+        email: result.email,
+        displayName: result.displayName,
+        photoUrl: result.photoUrl,
+      };
+      dispatch(add(currentUser));
     } else {
       dispatch(remove());
+      dispatch(removePosts());
     }
   });
 };

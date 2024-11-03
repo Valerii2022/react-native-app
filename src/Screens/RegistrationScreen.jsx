@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Alert,
   View,
@@ -13,8 +13,6 @@ import {
   Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
 import { useDispatch } from "react-redux";
 
 import { colors, commonStyles } from "../../styles/common";
@@ -23,15 +21,13 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import { registerDB } from "../utils/auth";
 import { add } from "../redux/slices/userSlice";
+import Camera from "../components/Camera";
 
 const Registration = () => {
   const [uriImage, setUriImage] = useState(
     "http://www.caccd.com/Image/dummy.jpg"
   );
-  const [facing, setFacing] = useState("back");
   const [camera, setCamera] = useState(false);
-  const [permission, requestPermission] = useCameraPermissions();
-  const [mediaLibraryPermission, setMediaLibraryPermission] = useState(null);
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loader, setLoader] = useState(false);
 
@@ -39,51 +35,8 @@ const Registration = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const cameraRef = useRef();
 
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-
-  if (camera) {
-    if (!permission) {
-      return <View />;
-    }
-
-    if (!permission.granted) {
-      return (
-        <View style={styles.messageContainer}>
-          <Text style={styles.message}>
-            Нам потрібен Ваш дозвіл, щоб показати камеру
-          </Text>
-          <Button onPress={requestPermission} title="Надати доступ" />
-        </View>
-      );
-    }
-  }
-
-  const requestMediaLibraryPermission = async () => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
-    setMediaLibraryPermission(status === "granted");
-  };
-
-  const takePhoto = async () => {
-    if (!camera) return;
-
-    if (mediaLibraryPermission === null) {
-      await requestMediaLibraryPermission();
-    }
-
-    if (mediaLibraryPermission) {
-      const image = await camera?.current?.takePictureAsync();
-      await MediaLibrary.saveToLibraryAsync(image.uri);
-      setUriImage(image.uri);
-    } else {
-      alert("Доступ до медіатеки не надано");
-    }
-  };
-
-  const toggleCameraFacing = () => {
-    setFacing((current) => (current === "back" ? "front" : "back"));
-  };
 
   const handleInputChange = (name, value) => {
     setForm({ ...form, [name]: value });
@@ -108,7 +61,7 @@ const Registration = () => {
     }
     setLoader(true);
     try {
-      const response = await registerDB({ email, password, name });
+      const response = await registerDB({ email, password, name, uriImage });
       if (typeof response === "string") {
         Alert.alert(response);
         return;
@@ -138,25 +91,11 @@ const Registration = () => {
           <View style={styles.formWrapper}>
             <View style={styles.imageWrapper}>
               {camera ? (
-                <CameraView
-                  ref={cameraRef}
-                  style={styles.camera}
-                  facing={facing}
-                >
-                  <Pressable
-                    style={styles.flipBtn}
-                    onPress={toggleCameraFacing}
-                  >
-                    <Text style={styles.text}>Flip</Text>
-                  </Pressable>
-                  <View style={styles.cameraWrapper}>
-                    <Pressable onPress={takePhoto}>
-                      <Image
-                        source={require("../../assets/images/camera.jpg")}
-                      />
-                    </Pressable>
-                  </View>
-                </CameraView>
+                <Camera
+                  setUriImage={setUriImage}
+                  setCamera={setCamera}
+                  camera={camera}
+                />
               ) : (
                 <Image source={{ uri: uriImage }} style={styles.avatar} />
               )}
@@ -221,40 +160,6 @@ const Registration = () => {
 };
 
 const styles = StyleSheet.create({
-  messageContainer: {
-    flex: 1,
-    justifyContent: "center",
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-  message: {
-    textAlign: "center",
-    fontFamily: "RobotoRegular",
-    fontSize: 20,
-    marginBottom: 16,
-  },
-  camera: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  flipBtn: { position: "absolute", top: 8, right: 8 },
-  cameraWrapper: {
-    backgroundColor: "rgba(255,255,255,0.3)",
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  text: {
-    fontFamily: "RobotoRegular",
-    fontSize: 16,
-    color: colors.placeholder,
-    marginBottom: 32,
-  },
   container: { flex: 1 },
   backgroundImage: {
     flex: 1,

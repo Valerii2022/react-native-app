@@ -19,6 +19,7 @@ const Stack = createStackNavigator();
 
 const MainStack = () => {
   const dispatch = useDispatch();
+
   const user = useSelector(currentUser);
 
   const getCurrentUserPosts = async (id) => {
@@ -36,7 +37,12 @@ const MainStack = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={user ? "Home" : "Login"}>
+      <Stack.Navigator initialRouteName={"Login"}>
+        <Stack.Screen
+          name="Home"
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Login"
           component={Login}
@@ -47,11 +53,7 @@ const MainStack = () => {
           component={Registration}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Home"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
+
         <Stack.Screen
           name="Comments"
           component={Comments}

@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { colors } from "../../styles/common";
 
-const PostItem = ({ post }) => {
-  const { id, url, title, comments, map, likes, location } = post;
+const PostItem = ({ post, uid }) => {
+  const { id, url, title, comments, map, likes } = post;
 
   const navigation = useNavigation();
 
@@ -21,7 +22,7 @@ const PostItem = ({ post }) => {
         <View style={styles.postDetailsWrapper}>
           <Pressable
             style={styles.postDetails}
-            onPress={() => navigation.navigate("Comments", { post })}
+            onPress={() => navigation.navigate("Comments", { id, uid })}
           >
             <Image
               source={
@@ -40,7 +41,7 @@ const PostItem = ({ post }) => {
               {comments.length}
             </Text>
           </Pressable>
-          <View style={styles.postDetails}>
+          <Pressable style={styles.postDetails}>
             <Image
               source={
                 likes > 0
@@ -54,7 +55,7 @@ const PostItem = ({ post }) => {
             >
               {likes}
             </Text>
-          </View>
+          </Pressable>
         </View>
         <Pressable
           style={styles.postDetails}

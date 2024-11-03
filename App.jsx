@@ -6,7 +6,7 @@ import { useFonts } from "expo-font";
 import { Provider, useDispatch } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-import { commonStyles } from "./styles/common";
+import { colors, commonStyles } from "./styles/common";
 
 import { persistor, store } from "./src/redux/store.js";
 import MainStack from "./src/navigation/MainStackNavigator";
@@ -20,7 +20,11 @@ const App = () => {
   });
 
   if (!fontsLoaded) {
-    return <ActivityIndicator />;
+    return (
+      <View style={{ marginTop: 300, flex: 1 }}>
+        <ActivityIndicator color={colors.orange} size="large" />
+      </View>
+    );
   }
 
   return (
