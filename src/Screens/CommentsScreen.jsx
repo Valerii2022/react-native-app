@@ -31,7 +31,6 @@ const Comments = ({ route }) => {
   const dispatch = useDispatch();
 
   const [comment, setComment] = useState("");
-  const [allComments, setAllComments] = useState([]);
 
   const formatDateAndTime = (isoString) => {
     const date = dayjs.utc(isoString);
@@ -159,9 +158,15 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     width: "100%",
     height: 240,
+    backgroundColor: colors.border,
   },
   commentsWrapper: { gap: 24, marginBottom: 16 },
-  avatar: { width: 28, height: 28, borderRadius: 100 },
+  avatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 100,
+    backgroundColor: colors.border,
+  },
   comment: { flexDirection: "row", gap: 16 },
   ownerComment: { flexDirection: "row-reverse", gap: 16 },
   textContainer: {

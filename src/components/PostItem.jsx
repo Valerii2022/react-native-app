@@ -74,7 +74,12 @@ const PostItem = ({ post, uid }) => {
 
 const styles = StyleSheet.create({
   post: { gap: 8 },
-  postImage: { height: 240, width: "100%", borderRadius: 8 },
+  postImage: {
+    height: 240,
+    width: "100%",
+    borderRadius: 8,
+    backgroundColor: colors.border,
+  },
   postTitle: {
     color: colors.black,
     fontSize: 16,

@@ -185,7 +185,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundGray,
     borderRadius: 16,
   },
-  avatar: { width: "100%", height: "100%", borderRadius: 16 },
+  avatar: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+    backgroundColor: colors.border,
+  },
   addButton: {
     position: "absolute",
     top: -32,

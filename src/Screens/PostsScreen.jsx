@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 16,
     overflow: "hidden",
+    backgroundColor: colors.border,
   },
   name: {
     fontFamily: "RobotoBold",
