@@ -9,13 +9,13 @@ import { getStorage } from "firebase/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCqlTGaS4N2BIXXeKGacQA17unkju3As1c", // з GoogleCloud API
-  authDomain: "react-native-app-a320c.firebaseapp.com",
-  databaseURL: "<https://react-native-app-a320c.firebaseio.com>",
-  projectId: "react-native-app-a320c",
-  storageBucket: "react-native-app-a320c.appspot.com",
-  appId: "",
-  messagingSenderId: "1050114982861",
+  apiKey: "AIzaSyAKAomYOjCnxzac1eUKapIEH7A-BNDlJfQ", // з GoogleCloud API
+  authDomain: "react-native-app-53726.firebaseapp.com",
+  databaseURL: "<https://react-native-app-53726.firebaseio.com>",
+  projectId: "react-native-app-53726",
+  storageBucket: "react-native-app-53726.appspot.com",
+  // appId: "",
+  // messagingSenderId: "1050114982861",
   // measurementId: 'G-measurement-id',
 };
 

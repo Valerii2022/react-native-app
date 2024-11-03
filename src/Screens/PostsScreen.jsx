@@ -3,12 +3,13 @@ import { useSelector } from "react-redux";
 
 import { colors } from "../../styles/common";
 
-import { tempPosts } from "../../assets/tempData/posts";
-import PostItem from "../components/PostItem";
 import { currentUser } from "../redux/slices/userSlice";
+import { getPosts } from "../redux/slices/postsSlice";
+import PostItem from "../components/PostItem";
 
 const Posts = () => {
   const user = useSelector(currentUser);
+  const posts = useSelector(getPosts);
 
   return (
     <>
@@ -26,9 +27,9 @@ const Posts = () => {
           </View>
         </View>
         <View style={styles.postWrapper}>
-          {tempPosts.length > 0 &&
-            tempPosts.map((item) => {
-              return <PostItem post={item} key={item.id} isLiked={false} />;
+          {posts &&
+            posts.map((item) => {
+              return <PostItem post={item} key={item.id} />;
             })}
         </View>
       </ScrollView>

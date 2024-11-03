@@ -12,15 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { colors, commonStyles } from "../../styles/common";
 
-import { tempPosts } from "../../assets/tempData/posts";
 import PostItem from "../components/PostItem";
 import { currentUser } from "../redux/slices/userSlice";
 import { logoutDB } from "../utils/auth";
+import { getPosts } from "../redux/slices/postsSlice";
 
 const Profile = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const user = useSelector(currentUser);
+  const posts = useSelector(getPosts);
 
   return (
     <ScrollView style={commonStyles.container}>
@@ -55,9 +56,9 @@ const Profile = () => {
           </View>
           <Text style={[commonStyles.title, styles.title]}>{user?.name}</Text>
           <View style={styles.postWrapper}>
-            {tempPosts.length > 0 &&
-              tempPosts.map((item) => {
-                return <PostItem post={item} key={item.id} isLiked={true} />;
+            {posts &&
+              posts.map((item) => {
+                return <PostItem post={item} key={item.id} />;
               })}
           </View>
         </View>

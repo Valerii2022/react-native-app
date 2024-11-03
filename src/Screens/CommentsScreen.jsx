@@ -18,8 +18,6 @@ import utc from "dayjs/plugin/utc";
 
 import { colors, commonStyles } from "../../styles/common";
 
-import { tempPosts } from "../../assets/tempData/posts";
-
 dayjs.extend(utc);
 
 const Comments = ({ route }) => {
@@ -36,7 +34,7 @@ const Comments = ({ route }) => {
     return { formattedDate, time };
   };
 
-  const currentPost = tempPosts.find((post) => post.id === route.params.id);
+  const currentPost = route.params.post;
 
   return (
     <KeyboardAvoidingView

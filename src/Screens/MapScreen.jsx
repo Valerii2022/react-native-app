@@ -5,8 +5,6 @@ import * as Location from "expo-location";
 
 import { colors } from "../../styles/common";
 
-import { tempPosts } from "../../assets/tempData/posts";
-
 const Map = ({ route }) => {
   const [location, setLocation] = useState(null);
   const [title, setTitle] = useState("");
@@ -18,7 +16,7 @@ const Map = ({ route }) => {
         console.log("Permission to access location was denied");
       }
 
-      const currentPost = tempPosts.find((post) => post.id === route.params.id);
+      const currentPost = route.params.post;
 
       const coords = {
         latitude: currentPost.location.latitude,

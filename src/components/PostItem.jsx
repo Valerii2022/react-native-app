@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { colors } from "../../styles/common";
 
-const PostItem = ({ post, isLiked }) => {
+const PostItem = ({ post }) => {
   const { id, url, title, comments, map, likes, location } = post;
 
   const navigation = useNavigation();
@@ -21,7 +21,7 @@ const PostItem = ({ post, isLiked }) => {
         <View style={styles.postDetailsWrapper}>
           <Pressable
             style={styles.postDetails}
-            onPress={() => navigation.navigate("Comments", { id })}
+            onPress={() => navigation.navigate("Comments", { post })}
           >
             <Image
               source={
@@ -40,27 +40,25 @@ const PostItem = ({ post, isLiked }) => {
               {comments.length}
             </Text>
           </Pressable>
-          {isLiked && (
-            <View style={styles.postDetails}>
-              <Image
-                source={
-                  likes > 0
-                    ? require("../../assets/images/like.png")
-                    : require("../../assets/images/no-likes.png")
-                }
-                style={styles.icon}
-              />
-              <Text
-                style={[styles.comments, likes === 0 && styles.commentsEmpty]}
-              >
-                {likes}
-              </Text>
-            </View>
-          )}
+          <View style={styles.postDetails}>
+            <Image
+              source={
+                likes > 0
+                  ? require("../../assets/images/like.png")
+                  : require("../../assets/images/no-likes.png")
+              }
+              style={styles.icon}
+            />
+            <Text
+              style={[styles.comments, likes === 0 && styles.commentsEmpty]}
+            >
+              {likes}
+            </Text>
+          </View>
         </View>
         <Pressable
           style={styles.postDetails}
-          onPress={() => navigation.navigate("Map", { id })}
+          onPress={() => navigation.navigate("Map", { post })}
         >
           <Image
             source={require("../../assets/images/map.png")}

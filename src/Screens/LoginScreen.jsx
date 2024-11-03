@@ -58,7 +58,7 @@ const Login = () => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS == "ios" ? "padding" : "height"}
-        // keyboardVerticalOffset={-208}
+        keyboardVerticalOffset={-208}
       >
         <ImageBackground
           source={require("../../assets/images/sign-up-BG.png")}

@@ -9,10 +9,12 @@ import {
   REGISTER,
 } from "redux-persist";
 import { userReducer } from "./slices/userSlice";
+import { postsReducer } from "./slices/postsSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    posts: postsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

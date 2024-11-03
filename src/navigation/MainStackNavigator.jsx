@@ -1,4 +1,5 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Image, Pressable, StyleSheet } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -11,11 +12,27 @@ import Comments from "../Screens/CommentsScreen";
 import Map from "../Screens/MapScreen";
 import TabNavigator from "./BottomTabNavigator";
 import { currentUser } from "../redux/slices/userSlice";
+import { getUserPosts } from "../utils/firestore";
+import { addUserPosts } from "../redux/slices/postsSlice";
 
 const Stack = createStackNavigator();
 
 const MainStack = () => {
+  const dispatch = useDispatch();
   const user = useSelector(currentUser);
+
+  const getCurrentUserPosts = async (id) => {
+    const posts = await getUserPosts(id);
+    if (posts) {
+      dispatch(addUserPosts(posts));
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      getCurrentUserPosts(user.uid);
+    }
+  }, [user]);
 
   return (
     <NavigationContainer>

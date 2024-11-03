@@ -11,26 +11,36 @@ import {
   View,
   Pressable,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
+import { db } from "../../config";
+import { setDoc, doc } from "firebase/firestore";
 
 import { colors, commonStyles } from "../../styles/common";
 
 import Button from "../components/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser } from "../redux/slices/userSlice";
+import { addPost, getPosts } from "../redux/slices/postsSlice";
+import { writeDataToFirestore } from "../utils/firestore";
 
 const CreatePosts = () => {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [coordinates, setCoordinates] = useState(null);
   const [uriImage, setUriImage] = useState("");
   const [facing, setFacing] = useState("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [mediaLibraryPermission, setMediaLibraryPermission] = useState(null);
+  const [loader, setLoader] = useState(false);
 
+  const user = useSelector(currentUser);
+  const userPosts = useSelector(getPosts);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const camera = useRef();
 
   if (!permission) {
@@ -69,21 +79,31 @@ const CreatePosts = () => {
     }
   };
 
-  function toggleCameraFacing() {
+  const toggleCameraFacing = () => {
     setFacing((current) => (current === "back" ? "front" : "back"));
-  }
+  };
 
   const handleCreatingPost = async () => {
+    setLoader(true);
     let { coords } = await Location.getCurrentPositionAsync({});
-    setTitle("");
-    setLocation("");
-    setUriImage("");
-    setCoordinates({ latitude: coords.latitude, longitude: coords.longitude });
-    console.log("image", uriImage);
-    console.log("title", title);
-    console.log("location", location);
-    console.log("coords", coordinates);
-    navigation.navigate("Публікації");
+    const result = await writeDataToFirestore(
+      user.uid,
+      title,
+      uriImage,
+      { latitude: coords.latitude, longitude: coords.longitude },
+      location,
+      userPosts
+    );
+    if (result) {
+      dispatch(addPost(result));
+      setTitle("");
+      setLocation("");
+      setUriImage("");
+      navigation.navigate("Публікації");
+    } else {
+      Alert.alert("Сталась помилка!");
+    }
+    setLoader(false);
   };
 
   return (
@@ -153,6 +173,7 @@ const CreatePosts = () => {
                 title="Опублікувати"
                 disable={!title || !location || !uriImage}
                 onPress={handleCreatingPost}
+                loader={loader}
               />
             </View>
             <Pressable
