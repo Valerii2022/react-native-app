@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { updateUserInFirestore } from "../utils/firestore";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../redux/slices/userSlice";
+import Button from "./Button";
 
 const Camera = ({ setUriImage, camera, setCamera, uid }) => {
   const [facing, setFacing] = useState("back");
